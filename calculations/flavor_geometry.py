@@ -119,11 +119,11 @@ def print_derivation(name, tag, latex_eq, calc_val, ref_key, unit="", latex_mode
             print_latex_tag(tag + "Sigma", f"{sigma:.2f}")
 
             if sigma < 1.0:
-                acc_text = f"matches the experimental consensus {exp_str} to within ${sigma:.2f}\\sigma$."
+                acc_text = f"is consistent with the experimental consensus {exp_str} to within ${sigma:.2f}\\sigma$."
             elif sigma < 3.0:
-                acc_text = f"lies within ${sigma:.2f}\\sigma$ of the observed value {exp_str}."
+                acc_text = f"lies within ${sigma:.2f}\\sigma$ of the experimental consensus {exp_str}."
             else:
-                acc_text = f"deviates by ${sigma:.2f}\\sigma$ from the observed value {exp_str}."
+                acc_text = f"deviates by ${sigma:.2f}\\sigma$ from the experimental consensus {exp_str}."
             print_latex_tag(tag + "AccText", acc_text)
         return
 
@@ -205,19 +205,20 @@ def main():
     L_INTRINSIC = NU + SIGMA + CHI
     L_EMBED = L_INTRINSIC + (2 * D)
     L_SUBSTRATE = (DELTA * D) + NU
+    R_M = D * DELTA
     N = 2 * NU
 
     PI = math.pi
 
     # ALPHA_INV
-    comp_CAP = PI * DELTA
-    comp_MAP = CHI
-    comp_PRO = -1 / ((D * DELTA) - SIGMA)
-    comp_GOV = -(CHI / DELTA)
-    comp_TOL = (1 / pow(N, 3)) * (CHI / SIGMA) * (1 - (SIGMA / (D * DELTA)))
-    comp_MAR = 1 / (L_EMBED * (SIGMA + 1) * pow(DELTA, 2))
+    AlphaInv_CAP = PI * DELTA
+    AlphaInv_MAP = CHI
+    AlphaInv_PRO = -1 / ((D * DELTA) - SIGMA)
+    AlphaInv_GOV = -(CHI / DELTA)
+    AlphaInv_TOL = (CHI * (R_M - SIGMA)) / (pow(N, 3) * SIGMA * R_M)
+    AlphaInv_MAR = 1 / (L_EMBED * (SIGMA + 1) * pow(DELTA, 2))
+    ALPHA_INV_GEO = AlphaInv_CAP + AlphaInv_MAP + AlphaInv_PRO + AlphaInv_GOV + AlphaInv_TOL + AlphaInv_MAR
     # Summation
-    ALPHA_INV_GEO = comp_CAP + comp_MAP + comp_PRO + comp_GOV + comp_TOL + comp_MAR
     ALPHA_GEO = 1.0 / ALPHA_INV_GEO
     ALPHA_INV = ALPHA_INV_GEO
 
@@ -393,9 +394,11 @@ def main():
     sin2_w = DELTA / denom_weak
     diff_gst = abs(mag(Vus) - sin2_w)
     gst_gap_pct = (diff_gst / sin2_w) * 100
+    gst_gen_thr = PI / (NU + SIGMA)
     if args.latex:
         print_derivation("Gauge-Flavor Unity", "UnityGap", r"|\sin\theta_C - \sin^2\theta_W|", diff_gst, "unity_gap", "", args.latex)
         print_latex_tag("GSTGapPct", f"{gst_gap_pct:.3f}")
+        print_derivation("GST GAP 23", "GapTwoThree", r"\frac{\pi}{\nu + \sigma}", gst_gen_thr, "", "", args.latex)
     else:
         print(f"\n--- GST Check ---")
         print(f"Gap: {diff_gst:.6f} ({gst_gap_pct:.3f}%)")
