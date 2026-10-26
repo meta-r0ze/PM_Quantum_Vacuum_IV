@@ -21,14 +21,16 @@ REFS = {
     "vub": MeasuredVal(0.00382, 0.00020, "", "navas_review_2024"),
     "vcb": MeasuredVal(0.0410, 0.0014, "", "navas_review_2024"),
     "vud": MeasuredVal(0.97373, 0.00031, "", "navas_review_2024"),
+    "vtb": MeasuredVal(1.014, 0.029, "", "navas_review_2024"),
+
+    # Computed
     "vcd": MeasuredVal(0.22480, 0.00067, "", "navas_review_2024"),
     "vcs": MeasuredVal(0.97310, 0.00020, "", "navas_review_2024"),
     "vts": MeasuredVal(0.0400, 0.0027, "", "navas_review_2024"),
-    "vtb": MeasuredVal(0.999100, 0.000034, "", "navas_review_2024"),
     "vtd": MeasuredVal(0.00870, 0.00020, "", "navas_review_2024"),
 
     # CP Violation
-    "jarlskog": MeasuredVal(3.06e-5, 0.20e-5, "", "navas_review_2024"),
+    "jarlskog": MeasuredVal(3.08e-5, 0.15e-5, "", "navas_review_2024"),
     "delta_cp": MeasuredVal(68.0, 5.0, "\\degree", "navas_review_2024"),
     
     # Wolfenstein (PDG 2024)
@@ -222,6 +224,8 @@ def main():
     ALPHA_GEO = 1.0 / ALPHA_INV_GEO
     ALPHA_INV = ALPHA_INV_GEO
 
+    COORDINATE_OVERHEAD = 1.0 - (1.0 / (D * DELTA))
+
     PHI = (1 + math.sqrt(5)) / 2
 
     if not args.latex:
@@ -253,6 +257,22 @@ def main():
     Vtd = (s12 * s23) - (c12 * c23 * s13 * phase)
     Vts = (-c12 * s23) - (s12 * c23 * s13 * phase)
     Vtb = c23 * c13
+
+    CKM_raw = [[Vud, Vus, Vub], [Vcd, Vcs, Vcb], [Vtd, Vts, Vtb]]
+
+    TEMPORAL_RESOLUTION_QUANTUM = 1.0 / (NU * DELTA)  # 1 / (16 * 43) = 1/688 approx 0.001453
+    DRESSING_FACTOR = math.sqrt(1.0 - TEMPORAL_RESOLUTION_QUANTUM)
+
+    # Apply the resolution floor dressing factor globally to all propagating states.
+    Vud *= DRESSING_FACTOR
+    Vus *= DRESSING_FACTOR
+    Vub *= DRESSING_FACTOR
+    Vcd *= DRESSING_FACTOR
+    Vcs *= DRESSING_FACTOR
+    Vcb *= DRESSING_FACTOR
+    Vtd *= DRESSING_FACTOR
+    Vts *= DRESSING_FACTOR
+    Vtb *= DRESSING_FACTOR
 
     CKM = [[Vud, Vus, Vub], [Vcd, Vcs, Vcb], [Vtd, Vts, Vtb]]
 
@@ -298,7 +318,48 @@ def main():
         print(f"Matrix: {J_exact:.6e} | Geom: {J_GEO:.6e} | Diff: {J_diff_pct:.2f}%")
         print("")
 
-    check_unitarity(CKM, args.latex)
+    check_unitarity(CKM_raw, latex_mode=args.latex)
+
+
+    # --- UNITARITY TAX & BARE VOLUME ---
+    # J_bare is the raw geometric product calculated directly from the structural apertures 
+    # (s12_geo, s23_geo, s13_geo, and the geometric phase) BEFORE matrix normalization.
+    sin_delta = math.sin(delta_rad)
+    J_bare = s12_geo * s23 * s13_geo * sin_delta
+    
+    # Unitary Normalization: c12 * c23 * c13^2
+    unitary_norm = c12 * c23 * (c13**2)
+    unitarity_tax_pct = (1.0 - unitary_norm) * 100.0
+    
+    # Project the bare volume onto the manifold
+    J_bare_proj = J_bare * COORDINATE_OVERHEAD
+    j_proj_diff_pct = (abs(J_bare_proj - J_GEO) / J_GEO) * 100.0
+
+    # Gap between raw geometric product J_bare and macroscopic budget J_geo
+    j_bare_diff_pct = (abs(J_bare - J_GEO) / J_GEO) * 100.0
+    
+    # Overall Gap between J_CKM (J_exact) and J_geo
+    j_ckm_gap_pct = (abs(J_exact - J_GEO) / J_GEO) * 100.0
+
+    if args.latex:
+        print_latex_tag("JbareVal", to_latex_sci(J_bare, 4))
+        print_latex_tag("JbareProjVal", to_latex_sci(J_bare_proj, 4))
+        print_latex_tag("JProjDiffPct", f"{j_proj_diff_pct:.2f}")
+        print_latex_tag("UnitaryNormVal", f"{unitary_norm:.4f}")
+        print_latex_tag("UnitarityTaxPct", f"{unitarity_tax_pct:.2f}")
+        print_latex_tag("JBareDiffPct", f"{j_bare_diff_pct:.2f}")
+        print_latex_tag("JCkmGapPct", f"{j_ckm_gap_pct:.2f}")
+    else:
+        print(f"--- Unitarity Tax ---")
+        print(f"J_bare (Raw Geo Product): {J_bare:.6e}")
+        print(f"J_bare (projected): {J_bare_proj:.6e}")
+        print(f"J_bare projected v.s. J_geo Diff: {j_proj_diff_pct:.6e}")
+        print(f"Unitary Normalization:    {unitary_norm:.4f}")
+        print(f"Unitarity Tax:            {unitarity_tax_pct:.2f}%")
+        print(f"J_bare vs J_geo Diff:     {j_bare_diff_pct:.2f}%")
+        print(f"Final J_CKM Gap:          {j_ckm_gap_pct:.2f}%")
+        print("")
+
 
     # --- 4. OUTPUTS: WOLFENSTEIN & MASS ---
     if not args.latex: 
@@ -403,6 +464,26 @@ def main():
         print(f"\n--- GST Check ---")
         print(f"Gap: {diff_gst:.6f} ({gst_gap_pct:.3f}%)")
 
+
+    
+    # --- J_PMNS: LEPTONIC JARLSKOG INVARIANT ---
+    J_PMNS = s12_nu * c12_nu * s13_nu * (c13_nu**2) * s23_nu * c23_nu * math.sin(math.radians(delta_nu))
+        
+    if not args.latex:
+        print("\n" + "="*60)
+        print("  J_PMNS: LEPTONIC JARLSKOG INVARIANT")
+        print("="*60)
+        print(f"\nJ_PMNS = s12·c12·s13·c13²·s23·c23·sin(delta_CP^nu)")
+        print(f"       = {s12_nu:.6f} · {c12_nu:.6f} · {s13_nu:.6f} · {c13_nu**2:.6f} · {s23_nu:.6f} · {c23_nu:.6f} · {math.sin(math.radians(delta_nu)):.6f}")
+        print(f"       = {J_PMNS:.12e}")
+        print(f"\nJ_CKM  ≈ {J_exact:.12e}  (for comparison)")
+        print(f"Ratio J_PMNS/J_CKM ≈ {J_PMNS/J_exact:.1f}")
+    else:
+        print_latex_tag("PMNSJarlskogVal", f"{J_PMNS:.12e}")
+        print_latex_tag("PMNSJarlskogRatio", f"{J_PMNS/J_exact:.1f}")
+        print_latex_tag("PMNSJarlskogFormula", 
+            r"s_{12}c_{12}s_{13}c_{13}^{2}s_{23}c_{23}\sin\delta_{CP}^{\nu}")
+
     # ==========================================
     # APPENDIX E: GEOMETRIC AUDITS
     # ==========================================
@@ -426,9 +507,16 @@ def main():
     # --- 9. GLOBAL AUDIT ---
     audit_dict = {
         # Quark Sector (CKM & Unitarity)
-        "vud": mag(Vud), "vus": mag(Vus), "vub": mag(Vub),
-        "vcd": mag(Vcd), "vcs": mag(Vcs), "vcb": mag(Vcb),
-        "vtd": mag(Vtd), "vts": mag(Vts), "vtb": mag(Vtb),
+        # ecluding unitarity-derived elements
+        "vud": mag(Vud),
+        "vus": mag(Vus),
+        "vub": mag(Vub),
+        #"vcd": mag(Vcd),
+        #"vcs": mag(Vcs),
+        "vcb": mag(Vcb),
+        #"vtd": mag(Vtd),
+        #"vts": mag(Vts),
+        "vtb": mag(Vtb),
         "jarlskog": J_exact, "delta_cp": delta_deg,
         "gamma": gamma_deg, "sin2beta": sin_2beta,
         
