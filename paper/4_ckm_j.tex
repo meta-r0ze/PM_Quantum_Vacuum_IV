@@ -1,0 +1,42 @@
+\CatchFileBetweenTags{\JarlskogMatrixEq}{calculations/flavor_geometry.tex}{JarlskogMatrixEq}
+\CatchFileBetweenTags{\JarlskogMatrixVal}{calculations/flavor_geometry.tex}{JarlskogMatrixVal}
+\CatchFileBetweenTags{\JarlskogMatrixAccText}{calculations/flavor_geometry.tex}{JarlskogMatrixAccText}
+\CatchFileBetweenTags{\JarlskogVal}{calculations/constants.tex}{JarlskogVal}
+\CatchFileBetweenTags{\JbareVal}{calculations/flavor_geometry.tex}{JbareVal}
+\CatchFileBetweenTags{\JbareProjVal}{calculations/flavor_geometry.tex}{JbareProjVal}
+\CatchFileBetweenTags{\JProjDiffPct}{calculations/flavor_geometry.tex}{JProjDiffPct}
+\CatchFileBetweenTags{\UnitaryNormVal}{calculations/flavor_geometry.tex}{UnitaryNormVal}
+\CatchFileBetweenTags{\UnitarityTaxPct}{calculations/flavor_geometry.tex}{UnitarityTaxPct}
+\CatchFileBetweenTags{\JCkmGapPct}{calculations/flavor_geometry.tex}{JCkmGapPct}
+
+\subsubsection{Bridging the Macroscopic Budget and Microscopic Kinematics}
+
+In standard particle physics, the Jarlskog invariant ($J$) is an empirical magnitude derived from the CKM matrix elements, representing the strength of CP violation. In the $E_8$-Persistence framework, this value serves as a critical structural bridge between the macroscopic geometry of the vacuum and the microscopic kinematics of the quarks.
+
+In the companion paper \textit{Persistence Mechanics: Nested Persistence}, the Jarlskog invariant was derived strictly top-down as the \textbf{Projection Frustration}: the absolute geometric capacity budget the substrate must allocate to maintain a causal timeline when projecting a 5-fold internal symmetry onto a 4-dimensional manifold. That macroscopic derivation yielded a theoretical budget of $J_{geo} \approx \mathbf{\JarlskogVal}$.
+
+Here, we evaluate the invariant bottom-up, directly from the parameter-free CKM matrix elements derived in Section \cref{sec:ckm_matrix}:
+
+\begin{equation}
+    J_{CKM} = \JarlskogMatrixEq \approx \mathbf{\JarlskogMatrixVal}
+\end{equation}
+
+This derived kinematic value \JarlskogMatrixAccText
+
+\vspace{1em}
+\noindent\textbf{Physical Interpretation: Manifold Projection and the Unitarity Tax} \\
+The $\sim \JCkmGapPct\%$ discrepancy between the top-down geometric budget ($J_{geo}$) and the CKM realization ($J_{CKM}$) is an exact, two-step mathematical consequence of embedding discrete topological boundaries into a continuous unitary matrix. 
+
+In the standard parameterization, the Jarlskog invariant factors into two components:
+\begin{equation}
+    J_{CKM} = \underbrace{(s_{12} s_{23} s_{13} \sin\delta)}_{J_{bare}} \times \underbrace{(c_{12} c_{23} c_{13}^2)}_{\text{Unitary Normalization}}
+\end{equation}
+
+\textbf{1. The Manifold Projection ($\eta$):} The ``Bare Volume'' ($J_{bare}$) represents the raw geometric product of the transition apertures evaluated strictly from the discrete lattice invariants ($\pi, \nu, \chi, \sigma, \alpha^{-1}$) prior to matrix closure. Evaluating this bare product yields $J_{bare} \approx \mathbf{\JbareVal}$. Because these raw quark boundaries must propagate across the spacetime grid, they are subject to the Coordinate Overhead ($\eta = 171/172$). Applying this projection yields $J_{bare} \cdot \eta \approx \mathbf{\JbareProjVal}$, perfectly recovering the macroscopic $J_{geo}$ budget to within $\mathbf{\JProjDiffPct\%}$. 
+
+\textbf{2. The Unitarity Tax:} To form a physically valid $3 \times 3$ transition matrix, these raw projected boundaries must be normalized to conserve total probability. This requires multiplying by the complementary cosine factors ($c = \sqrt{1-s^2}$). Because the primary chiral leak (the Cabibbo angle) is large ($s_{12} \approx 0.2244$), its normalization factor induces a strict geometric contraction:
+\begin{equation}
+    c_{12}c_{23}c_{13}^2 \approx \mathbf{\UnitaryNormVal}
+\end{equation}
+
+This represents a \textbf{\UnitarityTaxPct\% Unitarity Tax}. The discrete lattice topology perfectly generates the macroscopic entropic budget ($J_{bare} \cdot \eta \equiv J_{geo}$); however, the mathematical requirement that the quarks execute this budget via strictly probability-conserving transitions forces a geometric contraction, yielding the final physical observable $J_{CKM}$.

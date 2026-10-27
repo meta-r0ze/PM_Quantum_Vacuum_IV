@@ -100,6 +100,8 @@ The geometric admittance perfectly balances the interface demand against the dis
 \end{equation}
 Here $\pi$ enters as the continuum-limit ratio for phase-front closure around the topological defect, consistent with its role in the geometric impedance $Z_CAP = \pi \Delta$. The discrete lattice spacing is $\ell = 1$; the phase front traverses the unscaled circular boundary $\pi\ell = \pi$.
 
+The denominator $\nu - \chi = 14$ represents the active channels available for mixing after the topological boundary lock ($\chi = 2$) reserves its identity channels. The full temporal resolution of the node, however, requires the additional factor $\Delta = 43$, yielding the minimum resolvable transition probability $1/(\nu\Delta) = 1/688 \approx 0.00145$. This quantum defines the floor below which no transition can be resolved without dissolving into vacuum noise.
+
 This derivation identifies the primary mixing angle as the geometric admittance of the chiral boundary: relatively large because it is governed by the internal channel capacity rather than the macroscopic vacuum impedance. \sTwelveAccText
 
 
@@ -124,6 +126,8 @@ The structural cost of this leap is a single, irreducible bit of coordinate info
     s_{13} = \sThirteenEq = \sThirteenVal
 \end{equation}
 
+The $s_{13}$ transition is the maximally suppressed geometric deformation, bypassing the normal dimensional progression. Its suppression is bounded below by the temporal resolution quantum: no direct transition can be resolved finer than $1/(\nu \Delta)$. This sets the absolute floor for third-generation mixing.
+
 This derivation show that $s_{13}$ is the smallest mixing element because it represents a maximal violation of smooth geometric deformation. This \sThirteenAccText
 
 This geometric transition requires no continuous potential barrier; the suppression arises strictly from the discrete coordinate jump across orthogonal lattice subspaces.
@@ -132,7 +136,7 @@ This geometric transition requires no continuous potential barrier; the suppress
 
 In standard physics, the origin of CP violation (the asymmetry between matter and antimatter) is parameterized by the Dirac phase $\delta_{CP}$, whose value is empirically inserted.
 
-In the $E_8$-Persistence geometry, this phase is the necessary angular misalignment between the orthogonal manifold components that define a localized defect. To exist stably, a defect is represented by a complex state coordinate $z = x + iy$ in the projected transition plane:
+In the $E_8$ geometry, this phase is the necessary angular misalignment between the orthogonal manifold components that define a localized defect. To exist stably, a defect is represented by a complex state coordinate $z = x + iy$ in the projected transition plane:
 \begin{itemize}
     \item \textbf{The Real Component ($x = \chi$):} The static, real boundary constraint that anchors the defect to the manifold (the Euler characteristic, $\chi = 2$).
     \item \textbf{The Imaginary Component ($y = \sigma$):} The active, dynamical gauge transitions that generate phase rotations across the interaction manifold (the interaction symmetry order, $\sigma = 5$).
@@ -145,9 +149,32 @@ Because boundaries act as real constraints and gauge forces act as imaginary gen
 
 This maps the phase directly to the fundamental invariants of the substrate. It identifies the matter/antimatter asymmetry not as a broken dynamical symmetry, but as the static, coordinate-space misalignment between a particle's physical boundary and the gauge fields that translate it. This \CPPhaseAccText
 
+\subsubsection{The Cabibbo Anomaly: The Temporal Resolution Floor}
+Standard experimental fits of the CKM matrix exhibit a well-documented $\sim 3\sigma$ deficit in first-row unitarity ($|V_{ud}|^2 + |V_{us}|^2 + |V_{ub}|^2 \approx 0.9985 \pm 0.0007$). Standard physics interprets this as an anomaly, often attributing it to systematic errors in superallowed nuclear beta decay measurements.
+
+In the $E_8$-Persistence framework, strict unitarity is geometrically enforced by the finite capacity of the lattice node. However, this capacity possesses a fundamental \textbf{Temporal Resolution Quantum}. The active chiral node operates with $\nu = 16$ channels over a temporal cycle of $\Delta = 43$. The minimum resolvable quantum of probability per fundamental cycle---the ``pixel size'' of the causal manifold---is exactly:
+\begin{equation}
+    \epsilon_{min} = \frac{1}{\nu \cdot \Delta} = \frac{1}{16 \times 43} \approx 0.001453
+\end{equation}
+
+This represents the irreducible structural remainder: the quantum of probability that cannot be resolved into propagating channels and must be carried as structural metadata (the unitarity reference state). Consequently, the maximum observable probability for propagating states over the macroscopic manifold is $1 - (\nu\Delta)^{-1}$. 
+
+When the raw geometric transition amplitudes are dressed by this temporal resolution limit ($V_{ij} \to V_{ij} \sqrt{1 - \epsilon_{min}}$), the theoretical prediction for $V_{ud}$ shifts from the raw unitary value of $0.97449$ to the dressed physical value of $\mathbf{0.97378}$. This physically dressed prediction matches the experimental consensus ($0.97373 \pm 0.00031$) to within $\mathbf{0.17\sigma}$.
+
+The framework therefore predicts that the ``Cabibbo Anomaly'' is not an experimental error, nor a signal of new propagating particles, but the direct experimental observation of the discrete temporal granularity of the vacuum substrate.
+
+
+
+
 \subsection{The Full CKM Matrix Synthesis}
 
-In standard Quantum Field Theory, the unitarity of the CKM matrix ($V^\dagger V = I$) is postulated. Here, it is structurally enforced by \textbf{State Saturation}: because the node's causal flow is restricted by its finite capacity ($\nu=16$), the total probability density across all geometric tiers cannot exceed unity. Probability cannot be lost, only re-routed.
+In standard Quantum Field Theory, the unitarity of the CKM matrix ($V^\dagger V = I$) is postulated. Here, it is structurally enforced by \textbf{State Saturation:} because the node's causal flow is restricted by its finite capacity ($\nu = 16$) operating over a discrete temporal cycle ($\Delta = 43$), the total probability density across all geometric tiers is subject to a minimum resolution quantum of $1/(\nu\Delta) = 1/688$. This irreducible quantum is locked into the sterile channel $\nu_R$, which acts as the geometric reference state required for unitarity closure. The active $3\times3$ submatrix therefore satisfies modified unitarity:
+
+\begin{equation}
+\sum_{i=1}^{3} |V_{ij}|^2 = 1 - \frac{1}{\nu\Delta} = \frac{687}{688}
+\end{equation}
+
+with the remainder constituting the temporal lock. The sterile channel is the structural vacancy that maintains the unitarity constraint on the discrete substrate.
 
 By inserting the four geometrically derived parameters ($s_{12}, |V_{cb}|, s_{13}, \delta_{CP}$) into the standard parameterization, the full matrix is generated. The calculated geometric CKM matrix yields:
 
@@ -196,12 +223,28 @@ Consequently, Flavor Mixing angles are derived as exact geometric ratios, provid
 
 For theoretical completeness we translate our exact CKM matrix into the standard phenomenological observables.
 
+\CatchFileBetweenTags{\AreaEq}{calculations/flavor_geometry.tex}{AreaEq}
+\CatchFileBetweenTags{\AreaVal}{calculations/flavor_geometry.tex}{AreaVal}
+
 \subsection{The Unitarity Triangle}
 The geometric vectors successfully predict standard phenomenological observables without free parameters:
+
 \begin{itemize}
     \item \textbf{Angle $\gamma$:} $\AngleGammaEq = \AngleGammaVal$, which \AngleGammaAccText
     \item \textbf{Sin($2\beta$):} The precision observable from $B^0 \to J/\psi K_S$ decays is predicted to be $\sin(2\beta) = \SinTwoBetaVal$, which \SinTwoBetaAccText.
 \end{itemize}
+
+\subsubsection{The Geometric Origin of $J = 2A$}
+Standard phenomenology defines the Jarlskog Invariant $J$ as twice the area of the Unitarity Triangle ($J = 2A$). In the lattice model, this factor of 2 is not an arbitrary convention; it is a direct consequence of the \textbf{Chiral Projection}.
+
+The area $A$ exists strictly on the projected 4D spacetime manifold, but the invariant $J_{CKM}$ must account for the full informational capacity of the unprojected lattice node ($N = 32$) relative to the chiral channel ($\nu = 16$). Because physical matter strictly occupies the left-handed chiral half of the manifold's hardware, the geometric area of the triangle represents exactly half the invariant phase space:
+
+\begin{equation}
+    A_{triangle} = \frac{J_{CKM}}{N/\nu} = \AreaEq \approx \mathbf{\AreaVal}
+\end{equation}
+
+This characterizes the Unitarity Triangle as the exact ``half-integer'' holographic projection of the substrate's complete CP-violating phase space.
+
 
 The geometric matrix uniquely fixes the standard Wolfenstein expansion parameters:
 \begin{equation}
@@ -213,3 +256,20 @@ The geometric matrix uniquely fixes the standard Wolfenstein expansion parameter
 \end{split}
 \end{equation}
 \textit{Note: The standard Wolfenstein parametrization is an $\mathcal{O}(\lambda^3)$ approximation. Minor deviations in $\bar{\rho}$ and $\bar{\eta}$ from standard global fits are expected artifacts of this perturbative expansion, whereas our underlying geometric derivation is exact.}
+
+\section{The Sterile Channel and the Cabibbo Anomaly}
+
+The experimental observation of a $\sim 3\sigma$ deficit in first-row CKM unitarity ($|V_{ud}|^2 + |V_{us}|^2 + |V_{ub}|^2 \approx 0.9985$) has been interpreted as evidence for new physics beyond the Standard Model, including MeV-scale sterile neutrinos. In the $E_8$ substrate, this deficit is the direct measurement of the substrate's temporal resolution floor.
+
+The geometric prediction is exact:
+\begin{equation}
+\Delta_{\text{CKM}} \equiv 1 - \sum_{i=1}^{3} |V_{1i}|^2 = \frac{1}{\nu\Delta} = \frac{1}{688} \approx 0.00145
+\end{equation}
+
+This matches the experimental deficit $(1.12 \pm 0.28) \times 10^{-3}$ to within the uncertainty of radiative correction schemes. The ``missing'' probability is not carried by a propagating sterile neutrino but by the geometric vacancy $\nu_R$---the reference state locked by the unitarity constraint itself.
+
+\subsection*{Physical interpretation:} 
+The sterile channel $\nu_R$ is triality-forced (Section IV.D.2 of [3]). It corresponds to the direction in $\mathbf{8}_s$ that maps to $\mathbf{8}_c$ under the $\text{D}_4$ triality automorphism and carries zero weak isospin. At full saturation, the unitarity constraint locks exactly this channel as a reference state. The $1/688$ is the temporal beating pattern of this lock against the causal cycle $\Delta = 43$.
+
+\subsection*{Testable prediction:} 
+The temporal resolution quantum predicts an apparent unitarity deficit in time-integrated measurements. This deficit is static, not oscillatory, and manifests as a constant offset in high-precision CKM unitarity tests. The discrete temporal structure of the substrate is not directly resolvable, but its cumulative effect—the 1/688 probability locked in the sterile channel—is measurable.
