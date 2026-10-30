@@ -16,18 +16,19 @@ class MeasuredVal:
     citation: str
 
 REFS = {
-    # PDG 2024 Global Fit (CKM) - DOI: 10.1103/PhysRevD.110.030001
-    "vus": MeasuredVal(0.22500, 0.00067, "", "navas_review_2024"),
+    # PDG 2024 direct determinations (CKM review, Sec. 12.2), not the global fit.
+    # The global fit imposes unitarity, so comparing to it would count the same
+    # measurements several times and partly assume what is tested.
+    "vud": MeasuredVal(0.97367, 0.00032, "", "navas_review_2024"),
+    "vus": MeasuredVal(0.22431, 0.00085, "", "navas_review_2024"),
     "vub": MeasuredVal(0.00382, 0.00020, "", "navas_review_2024"),
-    "vcb": MeasuredVal(0.0410, 0.0014, "", "navas_review_2024"),
-    "vud": MeasuredVal(0.97373, 0.00031, "", "navas_review_2024"),
-    "vtb": MeasuredVal(1.014, 0.029, "", "navas_review_2024"),
-
-    # Computed
-    "vcd": MeasuredVal(0.22480, 0.00067, "", "navas_review_2024"),
-    "vcs": MeasuredVal(0.97310, 0.00020, "", "navas_review_2024"),
-    "vts": MeasuredVal(0.0400, 0.0027, "", "navas_review_2024"),
-    "vtd": MeasuredVal(0.00870, 0.00020, "", "navas_review_2024"),
+    "vcd": MeasuredVal(0.221, 0.004, "", "navas_review_2024"),
+    "vcs": MeasuredVal(0.975, 0.006, "", "navas_review_2024"),
+    "vcb": MeasuredVal(0.0411, 0.0012, "", "navas_review_2024"),
+    "vtb": MeasuredVal(1.010, 0.027, "", "navas_review_2024"),  # single top, no unitarity assumed
+    # From B mixing: rely on SM top loops and |Vtb| ~ 1; shown but not in the audit.
+    "vtd": MeasuredVal(0.0086, 0.0002, "", "navas_review_2024"),
+    "vts": MeasuredVal(0.0415, 0.0009, "", "navas_review_2024"),
 
     # CP Violation
     "jarlskog": MeasuredVal(3.08e-5, 0.15e-5, "", "navas_review_2024"),
@@ -260,19 +261,12 @@ def main():
 
     CKM_raw = [[Vud, Vus, Vub], [Vcd, Vcs, Vcb], [Vtd, Vts, Vtb]]
 
-    TEMPORAL_RESOLUTION_QUANTUM = 1.0 / (NU * DELTA)  # 1 / (16 * 43) = 1/688 approx 0.001453
-    DRESSING_FACTOR = math.sqrt(1.0 - TEMPORAL_RESOLUTION_QUANTUM)
-
-    # Apply the resolution floor dressing factor globally to all propagating states.
-    Vud *= DRESSING_FACTOR
-    Vus *= DRESSING_FACTOR
-    Vub *= DRESSING_FACTOR
-    Vcd *= DRESSING_FACTOR
-    Vcs *= DRESSING_FACTOR
-    Vcb *= DRESSING_FACTOR
-    Vtd *= DRESSING_FACTOR
-    Vts *= DRESSING_FACTOR
-    Vtb *= DRESSING_FACTOR
+    # The 1/(nu*Delta) dressing is not applied to the observable matrix.
+    # The CKM matrix is the change of basis between two complete orthonormal bases of the
+    # same three-generation space (Closure), so it is exactly unitary (Lean: CKMClosure).
+    # A dressing applied to all propagating states also multiplies the muon-decay
+    # normalization and cancels in every measured |V_ij| (CKMClosure.global_dressing_cancels).
+    TEMPORAL_RESOLUTION_QUANTUM = 1.0 / (NU * DELTA)  # 1/688, kept for reference only
 
     CKM = [[Vud, Vus, Vub], [Vcd, Vcs, Vcb], [Vtd, Vts, Vtb]]
 
@@ -508,16 +502,16 @@ def main():
     audit_dict = {
         # Quark Sector (CKM & Unitarity)
         # ecluding unitarity-derived elements
+        # Independent direct determinations only. Vtd/Vts (SM loops) are excluded;
+        # J and delta_cp are excluded because their references are fit/derived values
+        # that reuse the elements and gamma already counted here.
         "vud": mag(Vud),
         "vus": mag(Vus),
         "vub": mag(Vub),
-        #"vcd": mag(Vcd),
-        #"vcs": mag(Vcs),
+        "vcd": mag(Vcd),
+        "vcs": mag(Vcs),
         "vcb": mag(Vcb),
-        #"vtd": mag(Vtd),
-        #"vts": mag(Vts),
         "vtb": mag(Vtb),
-        "jarlskog": J_exact, "delta_cp": delta_deg,
         "gamma": gamma_deg, "sin2beta": sin_2beta,
         
         # Lepton Sector (PMNS)

@@ -147,7 +147,7 @@ This maps the phase directly to the fundamental invariants of the substrate. It 
 
 \subsection{The Full CKM Matrix Synthesis}
 
-In standard Quantum Field Theory, the unitarity of the CKM matrix ($V^\dagger V = I$) is postulated. Here, it is structurally enforced by \textbf{State Saturation}: because the node's causal flow is restricted by its finite capacity ($\nu=16$), the total probability density across all geometric tiers cannot exceed unity. Probability cannot be lost, only re-routed.
+In standard Quantum Field Theory, the unitarity of the CKM matrix ($V^\dagger V = I$) is postulated. A capacity bound alone would only give $\sum_j|V_{ij}|^2\le1$. Exact unitarity follows from Closure: the CKM matrix is the change of basis $U_u^\dagger U_d$ between the up-type and down-type mass eigenbases, and when the three generations are the whole flavour space both are complete orthonormal bases, so their product is exactly unitary (Lean: \texttt{CKMClosure.basis\_change\_unitary}). Probability is not lost, only re-routed.
 
 By inserting the four geometrically derived parameters ($s_{12}, |V_{cb}|, s_{13}, \delta_{CP}$) into the standard parameterization, the full matrix is generated. The calculated geometric CKM matrix yields:
 
