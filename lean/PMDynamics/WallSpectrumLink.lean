@@ -13,8 +13,9 @@ two spin states, where `m₊² m₋² = δ⁴` and `m₊² + m₋² = y² + 2δ�
 * `wall_seesaw`: the light mass is `m₋² = δ⁴/m₊²`.
 
 Still inputs: which flavour link `y` (or matrix `Y`) is physical, the identification of
-accessible states, and preparation and readout. Several flavours with a Hermitian `Y` reduce to
-this case eigenvalue by eigenvalue, but that reduction is not formalized here.
+accessible states, and preparation and readout. The exact multi-flavour reduction is now in
+`FlavourWallReduction`; the sine-momentum identification is in `WallLatticeSpectrum`.
+The nondegenerate-branch rank statement is checked in `WallRanks`.
 -/
 
 noncomputable section

@@ -2,6 +2,7 @@ import PMDynamics.OscillationAlgebra
 import PMDynamics.SymmetricMass
 import PMDynamics.CPAsymmetry
 import PMDynamics.RelativisticPhase
+import PMDynamics.OscillationStability
 import Lean
 
 /-! These general results deliberately use no theory-package imports.
@@ -12,6 +13,7 @@ run_cmd do
   for name in env.allImportedModuleNames do
     if name.toString.startsWith "PM" then
       unless name == `PMDynamics.OscillationAlgebra || name == `PMDynamics.SymmetricMass ||
-          name == `PMDynamics.CPAsymmetry || name == `PMDynamics.RelativisticPhase do
+          name == `PMDynamics.CPAsymmetry || name == `PMDynamics.RelativisticPhase ||
+          name == `PMDynamics.OscillationStability do
         throwError "Theory dependency {name} in the independent algebra modules"
   logInfo "Independent algebra audit passed: no earlier or later paper imports"
