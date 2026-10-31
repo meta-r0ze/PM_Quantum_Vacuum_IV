@@ -1,25 +1,19 @@
 import PMDynamics.CKMDressing
 
 /-!
-# What persists decides: the observable CKM matrix is exactly unitary
+# CKM closure conditional on complete three-generation mass bases
 
-Two upstream constraints settle the dressing question; no fit to the first-row data is used.
+`basis_change_unitary` proves that Uu† Ud is unitary for supplied complete unitary
+bases of the same three-dimensional flavour space. `closure_excludes_dressing`
+then excludes the proposed uniformly contracted block as that exact basis change.
+A larger unitary dilation remains possible with explicitly counted extra channels.
 
-* `basis_change_unitary`: the CKM matrix is `U_uᴴ U_d`, the change of basis between the up-type
-  and down-type mass eigenbases. Under Closure the three generations are the whole flavour state
-  space, so both are complete orthonormal bases of the same 3-dimensional space and the product
-  is exactly unitary.
-* `closure_excludes_dressing`: hence no such basis change equals a uniformly dressed matrix
-  `qV` with `q² = 687/688`. (`CKMDressing.dilation_needs_three`: keeping the dressing would
-  need at least three channels outside the three generations, which Closure does not supply.)
-* `global_dressing_cancels`: if the `1/688` resolution factor multiplies every propagating
-  state, as the calculator's comment says, it multiplies the muon-decay normalization as well,
-  and every measured `|V_ij|² = Γ_q/Γ_μ` is unchanged. A global factor is unobservable in the
-  matrix; only a quark-only factor would show, and that is the case excluded above.
-
-Consequence: the observable matrix is the undressed `V`. The first-row deficit
-`0.9984 ± 0.0007` is then a 2.3σ tension the theory predicts will close, and the undressed
-`|V_ud|` sits 2.6σ above the PDG 2024 direct value.
+Neither three physical generations nor complete accessibility of this sector is
+derived from Finiteness/Conservation/Causality by these theorems. The matrix
+hypotheses express that model choice. `global_dressing_cancels` is the conditional
+rate-ratio identity when the same nonzero factor multiplies both rates. It does
+not identify the physical normalization or resolve an experimental discrepancy.
+The fixed benchmark comparisons elsewhere are arithmetic tests, not selection laws.
 -/
 
 noncomputable section

@@ -4,7 +4,7 @@ import PMDynamics.CKM
 # The two CP phases, certified
 
 `CKM` bounds `sin δ` for `δ = arctan(σ/χ) = arctan(5/2)` but not the angle itself. This module
-certifies both CP phases as angles and compares them with current data.
+certifies the supplied CP phases and compares them with fixed dated benchmark inputs.
 
 * `arctan_lower`, `arctan_upper`: for `x ≥ 0`, the alternating series brackets `arctan x`
   (`x − x³/3 + x⁵/5 − x⁷/7 ≤ arctan x ≤ … + x⁹/9`), proved from the derivatives
@@ -12,8 +12,9 @@ certifies both CP phases as angles and compares them with current data.
 * `δ_bounds`: `δ = π/2 − arctan(2/5)` lies in `(1.190284, 1.190317)` rad.
 * `δ_degrees`: `68.198° < δ < 68.201°`.
 * `δ_vs_gamma`: against LHCb's 2024 combination `γ = (64.6 ± 2.8)°` (in the standard
-  parametrization `δ ≈ γ`), the pull is `+1.28` to `+1.29σ`. Against the `(68 ± 5)°` the paper
-  cites it is below `0.05σ`.
+  parametrization `δ ≈ γ`), the arithmetic pull is `+1.28` to `+1.29σ`. Against the `(68 ± 5)°` the paper
+  cites it is below `0.05σ`. The actual triangle angle γ is not identified with δ
+  by this theorem; its matrix-based extraction remains separate.
 * `nu_phase`: the leptonic phase `360°/φ = 180°(√5 − 1)` lies in `(222.492°, 222.493°)`, pull
   `+0.94σ` against NuFIT 6.0's `(197 ± 27)°`.
 -/

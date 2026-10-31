@@ -15,7 +15,7 @@ The calculator multiplies every CKM amplitude by `q = √(1 − 1/688)`, `688 = 
   Every row and every column loses the same `1/688`; `first_row_sum` states it for the first row.
 * `first_row_deficit_test`: the first-row sum measured from `|V_ud|`, `|V_us|`, `|V_ub|`,
   `0.9984 ± 0.0007` (CKM 2023 workshop), is within `0.22σ` of the dressed prediction and more
-  than `2.28σ` from exact unitarity. The dressing is a prediction of the Cabibbo-angle anomaly.
+  than `2.28σ` from exact unitarity. This is a fixed benchmark test of the dressing alternative, not a selection of it.
 * `dilation_needs_three`: if a dressed block `A` with `AA† = c·1`, `c ≠ 1`, is the
   upper-left `3×3` block of any unitary matrix of size `3 + m`, then `m ≥ 3`. The lost `1/688`
   cannot go into one extra outcome: Conservation requires at least three further channels
@@ -25,7 +25,7 @@ The calculator multiplies every CKM amplitude by `q = √(1 − 1/688)`, `688 = 
   Paper III's `φ²T_geo η` then exceeds it by more than 2% (`papers_disagree_dressed`).
 
 So the dressing and the paper's stated exact unitarity ("probability cannot be lost") cannot
-both hold for the three-generation matrix. The dressing fits the measured first row; keeping
+both hold for the three-generation matrix. The dressing is close to that fixed first-row benchmark; keeping
 it requires naming the three or more channels that carry the `1/688`.
 -/
 
