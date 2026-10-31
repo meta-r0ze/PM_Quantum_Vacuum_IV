@@ -34,6 +34,71 @@ The upstream work now supports four additional default modules:
   under independent unit phases on rows and columns. Energies, physical time and
   the squared-amplitude probability rule are explicit inputs.
 
+## Independent algebra and completed observables
+
+This pass adds four default modules without new upstream proof obligations:
+
+- `OscillationAlgebra` imports Mathlib only. It proves the complete three-state
+  cosine/sine and squared-sine interference formulas, conjugation asymmetry,
+  conjugation with phase reversal, common-phase cancellation and degenerate-phase
+  behavior. Arbitrary coefficients and the squared-amplitude readout are inputs.
+- `OscillationObservables` identifies those amplitudes with the already defined
+  finite flavour evolution. It proves the normalized squared-sine formula from
+  unitarity, invariance under a common energy offset, absence of conversion for
+  degenerate energies, vacuum conjugation/time reversal and survival-channel
+  conjugation symmetry. Physical eigenenergies, time/baseline and the vacuum
+  conjugation prescription remain inputs; no matter-effect model is asserted.
+- `TriangleGamma` extracts gamma from the actual invariant CKM quartet, proves
+  invariance under row/column phases, and proves agreement with the standard
+  ratio definition on the concrete matrix. The supplied ansatz gives
+  **68.16° < gamma < 68.17°**, strictly below delta. The certified difference is
+  between 0.028° and 0.041°. The old fixed 64.6 ± 2.8 degree benchmark gives an
+  actual-gamma residual between 1.27 and 1.28 quoted errors; this is not a new fit.
+- `SymmetricMass` imports Mathlib only. For arbitrary real spectral values and a
+  supplied unitary basis U, it constructs U diag(m) Uᵀ and proves transpose
+  symmetry, diagonal congruence and the same squared matrix as the Hermitian
+  U diag(m) U† construction. This is compatibility of matrix constructions, not
+  a derivation of fermion fields, statistics or a physically allowed mass term.
+  Propagation depending only on this squared matrix cannot distinguish the two.
+
+`AuditIndependent.lean` separately checks the generic algebra modules for no
+earlier/later theory imports. The numerical application still uses the existing
+proposed CKM inputs. The additional Paper II spectral bridge is described below.
+
+## CP factorization and spectral phase bridge
+
+The next pass completes two independent algebra steps and connects a new reusable
+Paper II spectral theorem:
+
+- `CPAsymmetry` factors the three-state conjugation difference as minus 16 times
+  one closed-triangle quartet times the three signed half-phase sines. Nonzero
+  quartet and all three nonzero sine factors give nonzero asymmetry; an equal
+  phase pair removes it. This module has no earlier-paper imports.
+- `CPObservables` supplies closure from unitary row orthogonality and fixes the
+  physical sign for theta_i=-t E_i. It identifies the 0/1 appearance quartet with
+  the matrix Jarlskog invariant, proves that any degenerate energy pair removes
+  vacuum asymmetry in every channel, and gives an explicit nonzero PMNS example
+  at a supplied test spectrum/time. The example is not a mass prediction.
+- `RelativisticPhase` uses Mathlib only: exact E=sqrt(p²+m²), exact gap
+  (m_i²-m_j²)/(E_i+E_j), and the bound
+  `|t*(E_i-E_j)/2 - t*(m_i²-m_j²)/(4p)| ≤ |t|*(m_i⁴+m_j⁴)/(16p³)` for p>0.
+  This controls the common-momentum approximation without equating it to the
+  exact spectrum or claiming a probability-error bound.
+- `PropagationEnergy` consumes Paper II's `DiracEnergy` theorem for the supplied
+  first-order four-component Clifford Hamiltonian. Positive-branch states exist
+  for every supplied mass at p>0, and any such eigenstate has the exact energy
+  used in the finite propagator. The common momentum offset cancels exactly.
+  An equal mass-squared pair then removes the vacuum conjugation asymmetry.
+
+The physical masses, accessible states/preparation, common momentum, mixing
+basis and clock/baseline readout remain inputs. The positive-state existence
+proof is not a derivation of a neutrino mass spectrum or a normalized complete
+spinor basis. The first-order Hamiltonian here is not silently identified with
+the complete eight-component finite-tick wall dispersion.
+
+`AuditIndependent.lean` now checks four generic modules: `OscillationAlgebra`,
+`SymmetricMass`, `CPAsymmetry` and `RelativisticPhase`.
+
 ## Premises and consequences
 
 | Supplied input | Checked consequence | What remains physical |
@@ -63,7 +128,8 @@ between the matrix J and Paper III's older φ²ηT_geo estimate; the latter is n
 an independent invariant once the matrix is fixed. Paper III now uses the matrix
 value. `TriangleAngles` derives sin(2β) from the actual matrix. `CPPhases.δ_vs_gamma`
 is an arithmetic comparison of the parametrization phase δ with a quoted γ
-benchmark; an exact matrix-based γ identification is not proved there.
+benchmark; the actual matrix-based γ is now extracted in `TriangleGamma`, which
+checks the branch, nonzero denominator and rephasing invariance explicitly.
 
 `FlavourPulls` and `CPPhases` use fixed PDG 2024 / NuFIT 6.0 / quoted experimental
 inputs. These are dated comparison tests, not a live data update or a proof that
@@ -73,12 +139,15 @@ clock/ledger definitions; its physical scope assumptions remain upstream.
 ## What is left
 
 See [REVIEW-AND-NEXT.md](REVIEW-AND-NEXT.md) for the reviewed dependency order.
-The main gap is an actual flavour/generation update and cost rule that selects the
+The full CP factorization and controlled mass-squared phase approximation are now
+proved. The main gap is an actual flavour/generation update and cost rule that selects the
 mixing bases, angles and phase. The positive-Hermitian arbitrary-mixing theorem
 shows why mass positivity, wall parity and unitarity alone cannot close that gap.
-Physical neutrino energies/mass splittings, actual triangle γ, and a calibrated
-oscillation comparison remain additional work. Column-phase cancellation does not
-classify allowed mass terms or prove a Dirac-only law. The manuscript's stronger
+Physical neutrino energies/mass splittings and a calibrated oscillation comparison
+remain additional work. The actual triangle γ and expanded probabilities are now
+proved. Column-phase cancellation and the constructive symmetric/Hermitian
+compatibility result do not select the physically allowed mass terms or prove a
+Dirac-only law. The manuscript's stronger
 unique-optimum, exhaustive-archetype and Majorana-exclusion statements are not
 established by this Lean package.
 
@@ -87,10 +156,14 @@ established by this Lean package.
 Run `./check.sh` with elan available, or set `PM_LAKE_BIN` to the pinned lake binary.
 The script builds the default library, audits every project declaration for only
 `propext`, `Classical.choice`, `Quot.sound`, and rejects Paper V–VI imports.
-Latest integrated `check.sh` passed on 2026-10-30: **4136 build jobs, 230
-strict-audited PMDynamics declarations**, only the three permitted standard axioms,
-no warnings and no Paper V–VI imports. Baseline before this pass: 4125 jobs and
-156 declarations. Log: `/tmp/pm4-flavour-bridge-full-check.log`.
+On 2026-10-30, the integrated check passed **4145 build jobs** and the strict
+audit of **359 PMDynamics declarations**, with no warnings and no Paper V–VI
+imports. `AuditIndependent.lean` passed for all four generic modules.
+The preceding pass had 4140 jobs and 319 declarations. Current log:
+`/tmp/pm4-cp-energy-full-check.log`.
 
-Only Paper IV's `lean/` sources/documentation were edited in this pass. No upstream
-source, experimental table, calculator or manuscript was changed.
+This pass also added the reusable `DiracEnergy` module and its documentation in
+Paper II. No experimental table, calculator or manuscript was changed.
+
+Paper II also passed its complete build and audits: 3764 jobs and 4002 declarations.
+See its `DIRAC-ENERGY.md` and `VERIFICATION.md` for scope and provenance.

@@ -5,3 +5,4 @@ project_lake="${PM_LAKE_BIN:-lake}"
 "$project_lake" build
 "$project_lake" env lean AuditStrict.lean
 "$project_lake" env lean AuditDependencies.lean
+"$project_lake" env lean AuditIndependent.lean
