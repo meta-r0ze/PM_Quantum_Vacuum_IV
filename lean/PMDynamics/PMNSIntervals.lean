@@ -2,7 +2,8 @@ import PMDynamics.PMNS
 import PMDynamics.OscillationAlgebra
 
 /-! Certified enclosures for every squared PMNS entry and its CP quartet.
-The angle/phase ansatz is supplied. These intervals are not experimental inputs
+The angle ansatz is supplied; the phase is the persistence sum-rule phase, and
+the cross term is exactly `(c₁₂² − s₁₂² s₁₃²)(1 − 2 s₂₃²)/2` (`crossTerm_exact`). These intervals are not experimental inputs
 or a proof that the proposed values minimize any physical transition cost. -/
 noncomputable section
 namespace PMDynamics.PMNSIntervals
@@ -68,86 +69,108 @@ lemma cosine_bounds (i : Fin 3) :
     · rw [Real.lt_sqrt (by norm_num)]; nlinarith [h.1,h.2]
     · rw [Real.sqrt_lt' (by norm_num)]; nlinarith [h.1,h.2]
 
-lemma delta_exact : PMNS.delta=Real.pi*(Real.sqrt 5-1) := by
-  have hs : Real.sqrt 5^2=5 := Real.sq_sqrt (by norm_num)
-  unfold PMNS.delta FlavourPulls.φ
-  rw [div_div_eq_mul_div]
-  apply (div_eq_iff (show 1+Real.sqrt 5 ≠ 0 by positivity)).mpr
-  linear_combination (-Real.pi)*hs
+/-- The product `c₁₂ s₁₂ c₂₃ s₂₃ s₁₃`. -/
+def prod5 : ℝ := PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.sine 2
 
-lemma half_angle_sine_window (x : ℝ) (hx : 0.3708<x ∧ x<0.3709) :
-    0.3622<Real.sin x ∧ Real.sin x<0.3625 := by
-  have hx0 : 0<x := by linarith [hx.1]
-  have hsin:=Real.sin_bound (show |x|≤1 by rw [abs_of_pos hx0]; linarith [hx.2])
-  rw [abs_of_pos hx0] at hsin
-  have hh:=abs_le.mp hsin
-  have h3l:=pow_lt_pow_left₀ hx.1 (by norm_num) (by decide : (3:ℕ)≠0)
-  have h3u:=pow_lt_pow_left₀ hx.2 hx0.le (by decide : (3:ℕ)≠0)
-  have h5u:=pow_lt_pow_left₀ hx.2 hx0.le (by decide : (5:ℕ)≠0)
-  constructor <;> nlinarith only [hx.1,hx.2,hh.1,hh.2,h3l,h3u,h5u]
-
-set_option maxHeartbeats 2000000 in
-lemma phase_parts_bounds :
-    -0.738<Real.cos PMNS.delta ∧ Real.cos PMNS.delta< -0.737 ∧
-    -0.676<Real.sin PMNS.delta ∧ Real.sin PMNS.delta< -0.674 := by
-  let x := (PMNS.delta-Real.pi)/2
-  have hp:=FlavourPulls.pi_b
-  have hs:=FlavourPulls.sqrt5_b
-  have hr : 0.2360679<Real.sqrt 5-2 ∧ Real.sqrt 5-2<0.2360680 := by
-    constructor <;> linarith
-  have hpr:=CKM.mul_bounds (by norm_num) (by norm_num) hp hr
-  have hx : 0.3708<x ∧ x<0.3709 := by
-    dsimp [x]; rw [delta_exact]
-    constructor <;> nlinarith only [hpr.1,hpr.2]
-  have hsb := half_angle_sine_window x hx
-  have hce : Real.cos PMNS.delta=2*Real.sin x^2-1 := by
-    rw [show PMNS.delta=Real.pi+2*x by dsimp [x]; ring,Real.cos_add,Real.cos_two_mul]
-    simp only [Real.cos_pi,Real.sin_pi,neg_mul,one_mul,zero_mul,sub_zero]
-    nlinarith [Real.sin_sq_add_cos_sq x]
-  have hsl:=pow_lt_pow_left₀ hsb.1 (by norm_num) (by decide : (2:ℕ)≠0)
-  have hsu:=pow_lt_pow_left₀ hsb.2 (by linarith [hsb.1]) (by decide : (2:ℕ)≠0)
-  have hc : -0.738<Real.cos PMNS.delta ∧ Real.cos PMNS.delta< -0.737 := by
-    constructor <;> nlinarith only [hce,hsl,hsu]
-  have hneg : Real.sin PMNS.delta<0 := by
-    rw [← Real.sin_sub_two_pi PMNS.delta]
-    apply Real.sin_neg_of_neg_of_neg_pi_lt <;>
-      linarith [PMNS.phase_interval.1,PMNS.phase_interval.2]
-  have hcl:=pow_lt_pow_left₀ (show (0.737:ℝ)< -Real.cos PMNS.delta by linarith [hc.2])
-    (by norm_num) (by decide : (2:ℕ)≠0)
-  have hcu:=pow_lt_pow_left₀ (show -Real.cos PMNS.delta<(0.738:ℝ) by linarith [hc.1])
-    (by linarith [hc.2]) (by decide : (2:ℕ)≠0)
-  refine ⟨hc.1,hc.2,?_,?_⟩ <;>
-    nlinarith only [hcl,hcu,hneg,Real.sin_sq_add_cos_sq PMNS.delta]
-
-def crossTerm : ℝ := 2*PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.sine 2*
-  Real.cos PMNS.delta
-
-lemma product_bounds :
-    0.0337727<PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.sine 2 ∧
-    PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.sine 2<0.0338267 := by
+lemma product_bounds : 0.0337727<prod5 ∧ prod5<0.0338267 := by
   have h1:=CKM.mul_bounds (by norm_num) (by norm_num) (cosine_bounds 0) (sine_bounds 0)
   have h2:=CKM.mul_bounds (by norm_num) (by norm_num) h1 (cosine_bounds 1)
   have h3:=CKM.mul_bounds (by norm_num) (by norm_num) h2 (sine_bounds 1)
   have h4:=CKM.mul_bounds (by norm_num) (by norm_num) h3 (sine_bounds 2)
+  unfold prod5
   constructor <;> norm_num at h4 ⊢ <;> linarith
 
-lemma cross_bounds : -0.0500<crossTerm ∧ crossTerm< -0.0497 := by
-  have hp:=product_bounds
-  have hc : 0.737< -Real.cos PMNS.delta ∧ -Real.cos PMNS.delta<0.738 := by
-    constructor <;> linarith [phase_parts_bounds.1,phase_parts_bounds.2.1]
-  have h:=CKM.mul_bounds (by norm_num) (by norm_num) hp hc
-  unfold crossTerm
-  constructor <;> nlinarith only [h.1,h.2]
+/-- The sum-rule numerator `(c₁₂² − s₁₂² s₁₃²) cos 2θ₂₃`. -/
+def ruleNum : ℝ :=
+  ((1-PMNS.sineSquared 0)-PMNS.sineSquared 0*PMNS.sineSquared 2)*(1-2*PMNS.sineSquared 1)
 
-theorem jarlskog_bounds : -0.0224<CKM.jarlskog PMNS.matrix ∧ CKM.jarlskog PMNS.matrix< -0.0222 := by
+lemma ruleNum_bounds : -0.102374<ruleNum ∧ ruleNum< -0.102344 := by
+  have ha : 0.30901<PMNS.sineSquared 0 ∧ PMNS.sineSquared 0<0.30902 := input_bounds 0
+  have hb : 0.57479<PMNS.sineSquared 1 ∧ PMNS.sineSquared 1<0.57481 := input_bounds 1
+  have hc : 0.0218920<PMNS.sineSquared 2 ∧ PMNS.sineSquared 2<0.0218921 := input_bounds 2
+  have hx : 0.684214<(1-PMNS.sineSquared 0)-PMNS.sineSquared 0*PMNS.sineSquared 2 ∧
+      (1-PMNS.sineSquared 0)-PMNS.sineSquared 0*PMNS.sineSquared 2<0.684226 := by
+    constructor <;> nlinarith [ha.1,ha.2,hc.1,hc.2]
+  have hy : -0.14962<1-2*PMNS.sineSquared 1 ∧ 1-2*PMNS.sineSquared 1< -0.14958 := by
+    constructor <;> linarith [hb.1,hb.2]
+  unfold ruleNum
+  constructor <;> nlinarith [hx.1,hx.2,hy.1,hy.2]
+
+lemma cosDelta_eq : PMNS.cosDelta=ruleNum/(4*prod5) := rfl
+
+lemma cosDelta_bounds : -0.758<PMNS.cosDelta ∧ PMNS.cosDelta< -0.756 := by
+  have hp:=product_bounds
+  have hn:=ruleNum_bounds
+  have h4 : 0<4*prod5 := by linarith [hp.1]
+  rw [cosDelta_eq]
+  constructor
+  · rw [lt_div_iff₀ h4]; nlinarith [hp.1,hp.2,hn.1]
+  · rw [div_lt_iff₀ h4]; nlinarith [hp.1,hp.2,hn.2]
+
+/-- `cos δ` is the sum-rule value. -/
+theorem cos_delta : Real.cos PMNS.delta=PMNS.cosDelta := by
+  have h:=cosDelta_bounds
+  unfold PMNS.delta
+  rw [Real.cos_sub, Real.cos_two_pi, Real.sin_two_pi, one_mul, zero_mul, add_zero,
+    Real.cos_arccos (by linarith [h.1]) (by linarith [h.2])]
+
+/-- `sin δ = −√(1 − cos² δ)`. -/
+theorem sin_delta : Real.sin PMNS.delta= -Real.sqrt (1-PMNS.cosDelta^2) := by
+  unfold PMNS.delta
+  rw [Real.sin_sub, Real.cos_two_pi, Real.sin_two_pi, zero_mul, one_mul, zero_sub,
+    Real.sin_arccos]
+
+lemma phase_parts_bounds :
+    -0.758<Real.cos PMNS.delta ∧ Real.cos PMNS.delta< -0.756 ∧
+    -0.655<Real.sin PMNS.delta ∧ Real.sin PMNS.delta< -0.652 := by
+  have h:=cosDelta_bounds
+  rw [cos_delta, sin_delta]
+  have hl : 0.6522<Real.sqrt (1-PMNS.cosDelta^2) := by
+    rw [Real.lt_sqrt (by norm_num)]; nlinarith [h.1,h.2]
+  have hu : Real.sqrt (1-PMNS.cosDelta^2)<0.6548 := by
+    rw [Real.sqrt_lt' (by norm_num)]; nlinarith [h.1,h.2]
+  exact ⟨h.1,h.2,by linarith,by linarith⟩
+
+theorem phase_interval : Real.pi<PMNS.delta ∧ PMNS.delta<2*Real.pi := by
+  have h:=cosDelta_bounds
+  have h0 : 0<Real.arccos PMNS.cosDelta := Real.arccos_pos.mpr (by linarith [h.2])
+  have hπ : Real.arccos PMNS.cosDelta<Real.pi := Real.arccos_lt_pi.mpr (by linarith [h.1])
+  unfold PMNS.delta
+  constructor <;> linarith
+
+def crossTerm : ℝ := 2*PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.sine 2*
+  Real.cos PMNS.delta
+
+/-- **The cross term is rational in the three sines.** -/
+theorem crossTerm_exact : crossTerm=ruleNum/2 := by
+  have hp:=product_bounds
+  have hne : prod5 ≠ 0 := by linarith [hp.1]
+  have e : crossTerm=2*prod5*Real.cos PMNS.delta := by unfold crossTerm prod5; ring
+  rw [e, cos_delta, cosDelta_eq]
+  field_simp
+  ring
+
+lemma cross_bounds : -0.051187<crossTerm ∧ crossTerm< -0.051172 := by
+  have h:=ruleNum_bounds
+  rw [crossTerm_exact]
+  constructor <;> linarith [h.1,h.2]
+
+theorem jarlskog_bounds : -0.0217<CKM.jarlskog PMNS.matrix ∧ CKM.jarlskog PMNS.matrix< -0.0215 := by
   have h1:=CKM.mul_bounds (by norm_num) (by norm_num) product_bounds (cosine_bounds 2)
   have h2:=CKM.mul_bounds (by norm_num) (by norm_num) h1 (cosine_bounds 2)
-  have hs : 0.674< -Real.sin PMNS.delta ∧ -Real.sin PMNS.delta<0.676 := by
+  have hs : 0.652< -Real.sin PMNS.delta ∧ -Real.sin PMNS.delta<0.655 := by
     constructor <;> linarith [phase_parts_bounds.2.2.1,phase_parts_bounds.2.2.2]
   have h:=CKM.mul_bounds (by norm_num) (by norm_num) h2 hs
   norm_num at h
   rw [PMNS.jarlskog]
+  have e : PMNS.cosine 0*PMNS.sine 0*PMNS.cosine 1*PMNS.sine 1*PMNS.cosine 2^2*PMNS.sine 2*
+      Real.sin PMNS.delta = -(prod5*PMNS.cosine 2*PMNS.cosine 2*(-Real.sin PMNS.delta)) := by
+    unfold prod5; ring
+  rw [e]
   constructor <;> nlinarith only [h.1,h.2]
+
+theorem jarlskog_negative : CKM.jarlskog PMNS.matrix<0 := by
+  linarith [jarlskog_bounds.2]
 
 /-- Generic squared CKM moduli before inserting any angle formulas. -/
 def moduli (c12 s12 c23 s23 c13 s13 θ : ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
@@ -190,11 +213,11 @@ lemma normSq_expected (i j : Fin 3) : Complex.normSq (PMNS.matrix i j)=expected 
 
 /-- Conservative outward rational enclosures; no measured entry is used. -/
 def lower : Matrix (Fin 3) (Fin 3) ℝ := !![0.6758,0.3022,0.0218;
-    0.0900,0.3473,0.5622;
-    0.2337,0.3500,0.4158]
+    0.0888,0.3488,0.5622;
+    0.2352,0.3488,0.4158]
 def upper : Matrix (Fin 3) (Fin 3) ℝ := !![0.6759,0.3023,0.0219;
-    0.0904,0.3478,0.5623;
-    0.2341,0.3504,0.4160]
+    0.0890,0.3490,0.5623;
+    0.2353,0.3490,0.4160]
 
 theorem squared_entry_bounds (i j : Fin 3) :
     lower i j<Complex.normSq (PMNS.matrix i j) ∧ Complex.normSq (PMNS.matrix i j)<upper i j := by
@@ -232,15 +255,15 @@ theorem squared_entry_bounds (i j : Fin 3) :
     constructor <;> linarith only [hp01]
   · change 0.0218<c ∧ c<0.0219
     constructor <;> linarith only [hc]
-  · change 0.0900<a*(1-b)+(1-a)*b*c+crossTerm ∧ a*(1-b)+(1-a)*b*c+crossTerm<0.0904
+  · change 0.0888<a*(1-b)+(1-a)*b*c+crossTerm ∧ a*(1-b)+(1-a)*b*c+crossTerm<0.0890
     constructor <;> linarith only [hp10a.1,hp10a.2,hp10b.1,hp10b.2,hx.1,hx.2]
-  · change 0.3473<(1-a)*(1-b)+a*b*c-crossTerm ∧ (1-a)*(1-b)+a*b*c-crossTerm<0.3478
+  · change 0.3488<(1-a)*(1-b)+a*b*c-crossTerm ∧ (1-a)*(1-b)+a*b*c-crossTerm<0.3490
     constructor <;> linarith only [hp11a.1,hp11a.2,hp11b.1,hp11b.2,hx.1,hx.2]
   · change 0.5622<b*(1-c) ∧ b*(1-c)<0.5623
     constructor <;> linarith only [hp12]
-  · change 0.2337<a*b+(1-a)*(1-b)*c-crossTerm ∧ a*b+(1-a)*(1-b)*c-crossTerm<0.2341
+  · change 0.2352<a*b+(1-a)*(1-b)*c-crossTerm ∧ a*b+(1-a)*(1-b)*c-crossTerm<0.2353
     constructor <;> linarith only [hp20a.1,hp20a.2,hp20b.1,hp20b.2,hx.1,hx.2]
-  · change 0.3500<(1-a)*b+a*(1-b)*c+crossTerm ∧ (1-a)*b+a*(1-b)*c+crossTerm<0.3504
+  · change 0.3488<(1-a)*b+a*(1-b)*c+crossTerm ∧ (1-a)*b+a*(1-b)*c+crossTerm<0.3490
     constructor <;> linarith only [hp21a.1,hp21a.2,hp21b.1,hp21b.2,hx.1,hx.2]
   · change 0.4158<(1-b)*(1-c) ∧ (1-b)*(1-c)<0.4160
     constructor <;> linarith only [hp22]

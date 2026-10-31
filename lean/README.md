@@ -13,7 +13,7 @@ remain open; those are not supplied by silently adding hypotheses to a theorem.
 | Modules | Checked mathematics | Supplied application inputs |
 | --- | --- | --- |
 | `CKM`, `CKMDressing`, `CKMClosure`, `Mixing` | Complete complex CKM matrix, both unitary Gram identities, det=1 in the chosen convention, Jarlskog quartet, dressing deficit and minimum dilation dimension | Angles/phase, complete accessible bases, any uniform dressing and physical extra outcomes |
-| `PMNS`, `PMNSIntervals` | Complete proposed matrix, unitarity, determinant, CP sign, all nine squared-entry intervals and a numerical quartet enclosure | Proposed angle and golden-phase formulas; no selected neutrino masses |
+| `PMNS`, `PMNSIntervals` | Complete proposed matrix, unitarity, determinant, CP sign, all nine squared-entry intervals and a numerical quartet enclosure | Proposed angle formulas; phase from the persistence sum rule formulas; no selected neutrino masses |
 | `FlavourCurrent` | Generation-universal current lifted to a supplied flavour space; charged block Uu†Ud and neutral-current basis identities; upstream vertex normalization retained | Generation space, physical mass bases and universal-current identification |
 | `MassMixing` | Hermitian positive mass constructions, diagonalization, wall-parity covariance and positive mass determinants; every unitary mixing remains compatible with fixed positive spectra | Actual link/mass law, spectrum and theta; positivity does not select angles |
 | `SymmetricMass` | Symmetric U diag(m) Uᵀ and Hermitian U diag(m) U† constructions can share the same squared propagation matrix | Allowed physical mass terms, statistics and other observables are not selected |
@@ -95,11 +95,16 @@ entries. Row/column labels here follow the supplied matrix convention.
 | Row | Column 0 | Column 1 | Column 2 |
 | --- | --- | --- | --- |
 | 0 | (0.6758, 0.6759) | (0.3022, 0.3023) | (0.0218, 0.0219) |
-| 1 | (0.0900, 0.0904) | (0.3473, 0.3478) | (0.5622, 0.5623) |
-| 2 | (0.2337, 0.2341) | (0.3500, 0.3504) | (0.4158, 0.4160) |
+| 1 | (0.0888, 0.0890) | (0.3488, 0.3490) | (0.5622, 0.5623) |
+| 2 | (0.2352, 0.2353) | (0.3488, 0.3490) | (0.4158, 0.4160) |
 
-`jarlskog_bounds` gives **-0.0224 < J_PMNS < -0.0222**. These are certified
-consequences of the ansatz, not an optimization or experimental fit.
+`jarlskog_bounds` gives **-0.0217 < J_PMNS < -0.0215**. The phase is no longer
+the golden angle: it is fixed by the persistence sum rule `|U_μ2| = |U_τ2|`
+(`ReferenceFlavour`, `PMNS.cosDelta`, `sin δ < 0` branch, `δ ≈ 220.8°`). The
+cross term is then exactly `(c₁₂² − s₁₂² s₁₃²)(1 − 2 s₂₃²)/2`
+(`PMNSIntervals.crossTerm_exact`), and `ReferenceFlavour.paper_on_rule` proves
+the matrix satisfies the rule exactly. These are certified consequences of the
+angle ansatz plus the rule, not an optimization or experimental fit.
 `FlavourPulls` and `CPPhases` retain the earlier fixed dated benchmark comparisons.
 No new measurements or global statistical interpretation were introduced.
 

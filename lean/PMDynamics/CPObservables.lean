@@ -1,5 +1,6 @@
 import PMDynamics.CPAsymmetry
 import PMDynamics.OscillationObservables
+import PMDynamics.PMNSIntervals
 
 /-! Exact vacuum three-flavour conjugation asymmetry for the existing finite
 propagator. Orthogonality supplies coefficient closure; energies, time and the
@@ -75,6 +76,6 @@ theorem pmns_example_positive :
     0 < FlavourEvolution.probability PMNS.matrix ![0,1,2] (Real.pi/2) 0 1-
       FlavourEvolution.probability (conjugated PMNS.matrix) ![0,1,2] (Real.pi/2) 0 1 := by
   rw [pmns_example]
-  nlinarith [PMNS.jarlskog_negative]
+  nlinarith [PMNSIntervals.jarlskog_negative]
 
 end PMDynamics.CPObservables

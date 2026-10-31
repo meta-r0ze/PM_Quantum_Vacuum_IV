@@ -399,7 +399,18 @@ def main():
     sin2_23_dressed = sin2_23_bare * bulk_shift
 
     sin2_13 = (SIGMA - CHI) / ALPHA_INV
-    delta_nu = 360.0 / PHI
+
+    # Persistence sum rule (Lean: PMDynamics.ReferenceFlavour). The reference neutrino must persist
+    # exactly, so it is a neutrino mass eigenstate (nu_2); it carries only the lepton-axis Z2, so
+    # |U_mu2| = |U_tau2| in the charged-lepton (generation) basis. This fixes cos(delta) from the
+    # three angles. The rule leaves the sign of sin(delta) open; the branch with sin(delta) < 0 is
+    # taken (the same half-plane as the earlier golden-angle value).
+    c2_12 = 1.0 - sin2_12
+    cos_delta_nu = ((c2_12 - sin2_12 * sin2_13) * (1.0 - 2.0 * sin2_23_dressed)) / (
+        math.sqrt(sin2_13)
+        * 2.0 * math.sqrt(sin2_12 * c2_12)
+        * 2.0 * math.sqrt(sin2_23_dressed * (1.0 - sin2_23_dressed)))
+    delta_nu = 360.0 - math.degrees(math.acos(cos_delta_nu))
 
     print_derivation("Solar (12)", "SolarAngle", r"\frac{1}{2\phi}", sin2_12, "theta_12_sin2", "", args.latex)
     
@@ -407,7 +418,7 @@ def main():
     print_derivation("Atmos (23)", "AtmosAngle", r"\frac{1}{\chi}\left(1 + \frac{\pi}{\nu+\sigma}\right)", sin2_23_dressed, "theta_23_sin2", "", args.latex)
     
     print_derivation("Reactor (13)", "ReactorAngle", r"\frac{\sigma - \chi}{\alpha^{-1}}", sin2_13, "theta_13_sin2", "", args.latex)
-    print_derivation("Nu CP Phase", "NuCP", r"\frac{360^{\circ}}{\phi}", delta_nu, "delta_cp_neutrino", "\\degree", args.latex)
+    print_derivation("Nu CP Phase", "NuCP", r"360^{\circ} - \arccos\!\left[\frac{(c_{12}^2 - s_{12}^2 s_{13}^2)\cos 2\theta_{23}}{s_{13}\sin 2\theta_{12}\sin 2\theta_{23}}\right]", delta_nu, "delta_cp_neutrino", "\\degree", args.latex)
 
     # --- PMNS MATRIX SYNTHESIS ---
     if not args.latex: print("\n--- PMNS Matrix Synthesis ---")

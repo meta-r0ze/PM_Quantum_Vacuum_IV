@@ -34,3 +34,7 @@ import PMDynamics.PMNSIntervals
 
 import PMDynamics.OscillationStability
 import PMDynamics.PropagationStability
+import PMDynamics.MassTermLaw
+import PMDynamics.GenerationLink
+import PMDynamics.GenerationBreaking
+import PMDynamics.ReferenceFlavour

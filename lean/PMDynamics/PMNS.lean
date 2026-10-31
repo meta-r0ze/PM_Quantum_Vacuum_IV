@@ -3,8 +3,9 @@ import PMDynamics.FlavourPulls
 import PMDynamics.CPPhases
 
 /-! The complete proposed Dirac-PMNS matrix, not only its four input numbers.
-All unitarity and CP statements are conditional on the supplied angle/phase
-formulas. No generation selection, neutrino mass spectrum or Dirac-only law
+The three angles are supplied formulas. The phase is not: it is fixed by the
+persistence sum rule `|U_μ2| = |U_τ2|` (`ReferenceFlavour`), on the `sin δ < 0`
+branch. All unitarity and CP statements are conditional on the angle formulas. No generation selection, neutrino mass spectrum or Dirac-only law
 is obtained by inserting them in a standard parametrization. -/
 noncomputable section
 namespace PMDynamics.PMNS
@@ -35,7 +36,15 @@ theorem sineSquared_range (j : Fin 3) : 0<sineSquared j ∧ sineSquared j<1 := b
 
 def sine (j : Fin 3) := Real.sqrt (sineSquared j)
 def cosine (j : Fin 3) := Real.sqrt (1-sineSquared j)
-def delta : ℝ := 2*Real.pi/FlavourPulls.φ
+/-- The persistence sum rule (`ReferenceFlavour`): `|U_μ2| = |U_τ2|` fixes
+`cos δ = (c₁₂² − s₁₂² s₁₃²) cos 2θ₂₃ / (s₁₃ sin 2θ₁₂ sin 2θ₂₃)`, written here with
+`cos 2θ₂₃ = 1 − 2 s₂₃²` and `sin 2θ = 2 s c`. -/
+def cosDelta : ℝ :=
+  ((1-sineSquared 0)-sineSquared 0*sineSquared 2)*(1-2*sineSquared 1)/
+    (4*(cosine 0*sine 0*cosine 1*sine 1*sine 2))
+
+/-- The branch with `sin δ < 0`. The rule fixes `cos δ` only. -/
+def delta : ℝ := 2*Real.pi-Real.arccos cosDelta
 def phase : ℂ := ⟨Real.cos delta, Real.sin delta⟩
 
 theorem sine_square (j : Fin 3) : sine j ^ 2=sineSquared j :=
@@ -70,37 +79,5 @@ theorem determinant : matrix.det=1 :=
 theorem jarlskog : CKM.jarlskog matrix =
     cosine 0*sine 0*cosine 1*sine 1*(cosine 2)^2*sine 2*Real.sin delta := by
   exact CKM.jarlskog_ckm phase (normalized 0)
-
-/-- The radian phase is precisely the degree convention already used by the calculator. -/
-theorem phase_degrees : delta*180/Real.pi=CPPhases.nuDeg := by
-  unfold delta CPPhases.nuDeg
-  change (2*Real.pi/((1+Real.sqrt 5)/2))*180/Real.pi=360/((1+Real.sqrt 5)/2)
-  field_simp
-  ring
-
-theorem phase_interval : Real.pi<delta ∧ delta<2*Real.pi := by
-  have hf : 1<FlavourPulls.φ ∧ FlavourPulls.φ<2 := by
-    have h:=FlavourPulls.sqrt5_b
-    unfold FlavourPulls.φ
-    constructor <;> linarith
-  unfold delta
-  constructor
-  · rw [lt_div_iff₀ (by linarith [hf.1])]
-    nlinarith [Real.pi_pos]
-  · rw [div_lt_iff₀ (by linarith [hf.1])]
-    nlinarith [Real.pi_pos]
-
-theorem jarlskog_negative : CKM.jarlskog matrix<0 := by
-  have hs : Real.sin delta<0 := by
-    rw [← Real.sin_sub_two_pi delta]
-    apply Real.sin_neg_of_neg_of_neg_pi_lt <;> linarith [phase_interval.1,phase_interval.2]
-  rw [jarlskog]
-  have h0:=sine_pos 0
-  have h1:=sine_pos 1
-  have h2:=sine_pos 2
-  have h3:=cosine_pos 0
-  have h4:=cosine_pos 1
-  have h5:=cosine_pos 2
-  exact mul_neg_of_pos_of_neg (by positivity) hs
 
 end PMDynamics.PMNS

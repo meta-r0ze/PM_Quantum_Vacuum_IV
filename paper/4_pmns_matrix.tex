@@ -87,15 +87,23 @@ The probability of this scattering is the \textbf{Geometric Admittance} of this 
 
 This derivation \ReactorAngleAccText It suggests that the ``3'' in the PMNS matrix is the exact same structural ``3'' that defines the number of colors and generations.
 
-\subsection{The Continuous Phase Lag (Neutrino CP Phase, \texorpdfstring{$\delta_{CP}^\nu$}{delta cpnu})}
+\subsection{The Reference Sum Rule (Neutrino CP Phase, \texorpdfstring{$\delta_{CP}^\nu$}{delta cpnu})}
 
-While the Quark CP phase is a discrete offset driven by the boundary lock ($\arctan(\sigma/\chi)$), the neutrino phase is the continuous counterpart. It represents the \textbf{Geometric Rotation} required for a bulk wave to complete a cycle within a 5-fold periodic system. 
+While the Quark CP phase is a discrete offset driven by the boundary lock ($\arctan(\sigma/\chi)$), the neutrino phase is not an independent input. It is fixed by the \textbf{persistence of the reference}.
 
-The unique solution that preserves circular phase-coherence in a $\phi$-governed bulk is the Golden Angle—the proportion of the circle ($360^\circ$) divided by $\phi$:
+The reference that weak events repair is the neutral lepton state: the neutrino. It must persist exactly. A state built from neutrino mass states of different frequencies beats, so its composition changes in time and it cannot persist. The reference generation state is therefore a single neutrino mass eigenstate. Ordinary flavour states produced in weak events oscillate; the reference cannot.
+
+The lepton axis breaks the triality symmetry of the three generations down to one exchange: the two generations that differ only in their spinor classes. Carrying no further generation label, the reference is invariant under this exchange, so its components on those two generations are equal. In the charged-lepton basis, the reference column of the PMNS matrix is then $\mu$--$\tau$ balanced, $|U_{\mu 2}| = |U_{\tau 2}|$. In the standard parameterization this is exactly
 \begin{equation}
-    \delta_{CP}^\nu = \NuCPEq \approx \mathbf{\NuCPVal}
+    \cos\delta_{CP}^\nu = \frac{(c_{12}^2 - s_{12}^2 s_{13}^2)\cos 2\theta_{23}}{s_{13}\,\sin 2\theta_{12}\,\sin 2\theta_{23}},
 \end{equation}
-This prediction \NuCPAccText It distinguishes the $E_8$ lattice from standard theories by providing a fixed geometric origin for leptonic CP violation, rather than a range of possibilities.
+so the phase follows from the three angles derived above (taking $\sin\delta_{CP}^\nu < 0$):
+\begin{equation}
+    \delta_{CP}^\nu \approx \mathbf{\NuCPVal}
+\end{equation}
+This prediction \NuCPAccText
+
+The rule rests on three stated premises: the reference carries only the lepton-axis exchange symmetry; the charged-lepton mass basis is the generation basis; and the reference is the $\nu_2$ mass state. It fixes $\cos\delta_{CP}^\nu$ but not the sign of $\sin\delta_{CP}^\nu$ ($220.8^\circ$ or $139.2^\circ$); we take $\sin\delta_{CP}^\nu < 0$. It also ties the sign of $\cos\delta_{CP}^\nu$ to the $\theta_{23}$ octant: $\theta_{23} > 45^\circ$ requires $\cos\delta_{CP}^\nu < 0$. The persistence argument, the exchange symmetry and the sum rule are machine-checked (\texttt{PMDynamics.ReferenceFlavour}). An earlier version of this paper proposed the Golden Angle $360^\circ/\phi \approx 222.5^\circ$; it lies within $1.7^\circ$ of the sum rule, which replaces it.
 
 \subsection{The Full PMNS Matrix Synthesis: State Saturation}
 
