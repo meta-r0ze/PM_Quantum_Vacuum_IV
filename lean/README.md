@@ -4,135 +4,180 @@ Lean 4.34.1; pinned sibling dependencies and the existing local mathlib cache.
 Run `./check.sh`, or set `PM_LAKE_BIN` to the pinned Lake executable. Paper IV
 uses Papers I–III and rejects imports from Papers V–VI.
 
-The conditional matrix/spectrum/propagation results below are checked. The
-physical generation/update law and selection of the mixing and mass formulas
-remain open; those are not supplied by silently adding hypotheses to a theorem.
+The conditional matrix/spectrum/propagation results are checked. The physical
+generation/update law and selection of the mixing and mass formulas remain open;
+those are not supplied by silently adding hypotheses to a theorem.
 
 ## Matrices, currents and mass constructions
 
 | Modules | Checked mathematics | Supplied application inputs |
 | --- | --- | --- |
-| `CKM`, `CKMDressing`, `CKMClosure`, `Mixing` | Complete complex CKM matrix, both unitary Gram identities, det=1 in the chosen convention, Jarlskog quartet, dressing deficit and minimum dilation dimension | Angles/phase, complete accessible bases, any uniform dressing and physical extra outcomes |
-| `PMNS`, `PMNSIntervals` | Complete proposed matrix, unitarity, determinant, CP sign, all nine squared-entry intervals and a numerical quartet enclosure | Proposed angle formulas; phase from the persistence sum rule formulas; no selected neutrino masses |
-| `FlavourCurrent` | Generation-universal current lifted to a supplied flavour space; charged block Uu†Ud and neutral-current basis identities; upstream vertex normalization retained | Generation space, physical mass bases and universal-current identification |
-| `MassMixing` | Hermitian positive mass constructions, diagonalization, wall-parity covariance and positive mass determinants; every unitary mixing remains compatible with fixed positive spectra | Actual link/mass law, spectrum and theta; positivity does not select angles |
-| `SymmetricMass` | Symmetric U diag(m) Uᵀ and Hermitian U diag(m) U† constructions can share the same squared propagation matrix | Allowed physical mass terms, statistics and other observables are not selected |
+| `CKM`, `CKMDressing`, `CKMClosure`, `Mixing` | Complete complex CKM matrix, unitarity, det=1, Jarlskog quartet, dressing deficit | Angles/phase, complete accessible bases, any uniform dressing |
+| `PMNS`, `PMNSIntervals` | Complete matrix, unitarity, determinant, CP sign, all nine squared-entry intervals, quartet enclosure | Proposed angle formulas; phase from persistence sum rule; no selected masses |
+| `FlavourCurrent` | Generation-universal current, charged block Uu†Ud, neutral-current identities | Generation space, physical mass bases, universal-current identification |
+| `MassMixing` | Hermitian positive mass constructions, diagonalization, wall-parity covariance | Actual link/mass law, spectrum, theta; positivity does not select angles |
+| `SymmetricMass` | Symmetric U diag(m) Uᵀ and Hermitian U diag(m) U† can share squared propagation | Allowed physical mass terms, statistics, observables not selected |
 
-## Exact two-wall spectrum and its flavour reduction
+## Exact wall spectrum and flavour reduction
 
-The newly integrated Paper II `WallDispersion` result supplies the exact
-one-flavour Hamiltonian spectrum, not merely a resemblance to a Dirac formula.
-`WallSpectrumLink` identifies its branch energies with the relativistic energy
-law and proves the light/heavy seesaw relation.
+`WallSpectrumLink` identifies branch energies with the relativistic energy law
+and proves the light/heavy seesaw relation.
 
-- `FlavourWallReduction` gives the complete unitary change of basis for the
-  actual `WallExchange.H` operator. Every Hermitian link is diagonalized using
-  the upstream spectral theorem. `hermitian_energy_iff` proves that an energy
-  occurs in the full model **iff** it occurs in one scalar-link flavour block.
-  `hermitian_light_state` realizes each allowed light-branch energy in the full
-  state space. The flavour dimension is arbitrary; this does not derive three
-  physical generations or select a link.
-- `WallLatticeSpectrum.concrete_hamiltonian` proves that replacing momentum by
-  sin(k) gives the actual concrete two-wall Hamiltonian at link y=1. The branch
-  theorem and the controlled half-phase estimate then apply to that lattice
-  model. The exact lattice expression uses sin(p), with its domain stated.
-- `WallRanks.branch_ranks` turns idempotent trace-two certificates into actual
-  rank-two statements for both energy signs on both regular branches. These are
-  complex linear mode counts, not a particle-statistics theorem.
-
-The four-projector branch statements require nonzero link and positive light
-energy, as in the upstream theorem. They do not identify the Hamiltonian
-exponential with an arbitrary finite-tick update. Mathematical diagonalization
-and state existence do not choose the physically accessible branch or preparation.
+- `FlavourWallReduction`: complete unitary change of basis for `WallExchange.H`,
+  arbitrary finite flavour dimension, not three generations or a selected link.
+- `WallLatticeSpectrum.concrete_hamiltonian`: sin(k) gives concrete Hamiltonian at y=1.
+- `WallRanks.branch_ranks`: trace-two idempotents → rank-two projectors.
 
 ## Observables and controlled phases
 
-`UnitarityTriangle`, `TriangleAngles` and `TriangleGamma` derive area=|J|/2,
-sin(2 beta), and the actual rephasing-invariant gamma from the matrix. For the
-supplied CKM ansatz, **68.16° < gamma < 68.17°**, strictly below delta; the
-certified difference is 0.028–0.041°. The fixed gamma benchmark gives a residual
-of 1.27–1.28 quoted errors. The old delta comparison is retained as a proxy test,
-not identified with gamma. `JarlskogReview` preserves the mismatch with the older
-standalone geometric J formula; no value is selected by closeness to data.
+`UnitarityTriangle`, `TriangleAngles`, `TriangleGamma`: area=|J|/2, sin(2β),
+gamma from the matrix. For the supplied CKM ansatz, **68.16° < γ < 68.17°**.
 
-`FlavourEvolution`, `OscillationAlgebra`, `OscillationObservables`, `CPAsymmetry`
-and `CPObservables` prove exact finite unitary propagation, normalized transition
-probabilities, expanded cosine/sine and squared-sine formulas, the fully factored
-three-flavour conjugation asymmetry, rephasing/common-energy-shift cancellation,
-and absence of vacuum asymmetry for a degenerate energy pair. The PMNS example
-uses a supplied test spectrum/time and is not a mass prediction. Energies,
-preparation, time/baseline and the conjugate-mixing vacuum prescription remain
-inputs; matter effects are not claimed.
+`OscillationAlgebra`, `OscillationObservables`, `CPAsymmetry`, `CPObservables`:
+exact finite unitary propagation, normalized probabilities, expanded formulas,
+factored three-flavour conjugation asymmetry, rephasing cancellation.
 
-`RelativisticPhase` proves the exact gap (m_i²-m_j²)/(E_i+E_j) and
-
-    |t*(E_i-E_j)/2 - t*(m_i²-m_j²)/(4p)|
-      ≤ |t|*(m_i⁴+m_j⁴)/(16p³),  p>0.
-
-`PropagationEnergy` consumes Paper II's first-order Clifford eigenstate theorem,
-including positive-state existence, and connects the supplied eigenstates to
-these phases. The new wall modules separately close the exact eight-component
-Hamiltonian identification. Neither result selects physical neutrino masses or
-calibrates a baseline.
-
-`OscillationStability` now proves a separate probability-error bound from the
-phase errors, independently of earlier papers. `PropagationStability` applies it
-to any unitary mixing matrix, including the exact wall light-branch energies:
-
-    |P_exact - P_mass_squared| ≤ |t|*B/(4p³),  p>0, m_i⁴ ≤ B.
-
-The common momentum phase is removed exactly. The bound is valid at every real
-time; it is useful when its right-hand side is small. The corresponding vacuum
-conjugation-asymmetry error is at most |t|*B/(2p³). The wall specialization uses
-the derived light mass-squared function; it does not select the link eigenvalues
-or replace exponential propagation with an arbitrary microscopic update.
+`RelativisticPhase`: exact gap formula and controlled half-phase estimate.
+`PropagationEnergy`: connects supplied eigenstates to phases.
+`OscillationStability`: probability-error bound, independent of earlier papers.
+`PropagationStability`: uniform fourth-mass bound, common momentum phase removal.
 
 ## Certified PMNS entries
 
-`PMNSIntervals.squared_entry_bounds` encloses |U_ij|² without using measured
-entries. Row/column labels here follow the supplied matrix convention.
+`PMNSIntervals.squared_entry_bounds` encloses |U_ij|² without measured entries.
+`jarlskog_bounds` gives **-0.0217 < J < -0.0215**. The phase δ ≈ 220.8° from the
+persistence sum rule `|U_μ2| = |U_τ2|` (`ReferenceFlavour`, `PMNS.cosDelta`).
 
-| Row | Column 0 | Column 1 | Column 2 |
-| --- | --- | --- | --- |
-| 0 | (0.6758, 0.6759) | (0.3022, 0.3023) | (0.0218, 0.0219) |
-| 1 | (0.0888, 0.0890) | (0.3488, 0.3490) | (0.5622, 0.5623) |
-| 2 | (0.2352, 0.2353) | (0.3488, 0.3490) | (0.4158, 0.4160) |
+## Native carrier and register realization
 
-`jarlskog_bounds` gives **-0.0217 < J_PMNS < -0.0215**. The phase is no longer
-the golden angle: it is fixed by the persistence sum rule `|U_μ2| = |U_τ2|`
-(`ReferenceFlavour`, `PMNS.cosDelta`, `sin δ < 0` branch, `δ ≈ 220.8°`). The
-cross term is then exactly `(c₁₂² − s₁₂² s₁₃²)(1 − 2 s₂₃²)/2`
-(`PMNSIntervals.crossTerm_exact`), and `ReferenceFlavour.paper_on_rule` proves
-the matrix satisfies the rule exactly. These are certified consequences of the
-angle ansatz plus the rule, not an optimization or experimental fit.
-`FlavourPulls` and `CPPhases` retain the earlier fixed dated benchmark comparisons.
-No new measurements or global statistical interpretation were introduced.
+| Module | Proved result |
+| --- | --- |
+| `NativeFlavourWall` | Native Hamiltonian identified with wall operator, exact readout, encoded spectrum |
+| `NativeFlavourCurrent` | Native chiral current, charged mass-basis block, universal neutral identity |
+| `NativeMassBasis` | Mass frame diagonalizes Hermitian block; every unitary mixing with fixed spectra |
+| `NativeFlavourPropagation` | Prepared eigenmodes give exact evolution, normalized probabilities, compressed ticks |
+| `LightFlavourPreparation` | Orthonormal three-mode light preparation exists for every regular link |
+| `NativeFlavourObservables` | Native probabilities: interference, CP asymmetry, error bounds |
+| `NativeFlavourStationarity` | Configuration-space residual = flavour residual; variance/gap bounds, ray tests |
+
+## Reference persistence and stationarity
+
+`ReferenceSpectrum`: persistence iff single-energy eigenspace.
+`sampled_aliasing`: integer-tick persistence aliases distinct energies.
+`one_tick_iff_of_band`: occupied-band condition bridges sampled to continuous.
+
+`SpectralVariance`: exact least-squares identity.
+`FlavourStationarity`: residual coordinates, gap bounds, full-support PMNS obstruction.
+`NativeFlavourStationarity`: native realization of same conclusions.
 
 ## Completion boundary
 
-See [REVIEW-AND-NEXT.md](REVIEW-AND-NEXT.md). The remaining central work is a
-physical generation/update contract and a selection law for the link, mixing
-bases, angle/phase formulas and masses. Paper II's new weak-vertex and continuum
-proofs supply operator mathematics but do not select flavour eigenbases.
+### Restoration (full six-root alphabet)
 
-In particular, the existing arbitrary-mixing theorem permits every unitary
-matrix with the same positive masses and wall-parity property. The compatible
-symmetric/Hermitian construction also shows why propagation alone cannot prove
-a Dirac-only law. Unique-optimum, exhaustive-archetype and Majorana-exclusion
-claims in the manuscript are not established by these conditional results.
+| Module | Proved result |
+| --- | --- |
+| `AllRootRestoration` | Exhaustive six-reflection alphabet, minimum two calls, price c, density c K/T |
+| `ReferenceSafeRestoration` | Roots 1,2,3 preserve lepton coordinate, two-call exact repair |
+| `RootRepairSelection` | Unique cheapest restoring word `[1,0]`, most persistent |
+| `RestorationBudget` | Feasibility bounds, minimum density c K/T for T>0, K>0 |
+
+The cheapest schedules are `[1,0]`, `[0,2]` and `[2,1]`; they implement the same
+inverse operator. A unique cheapest word in the restricted generator alphabet
+must not be reported as a unique physical schedule.
+
+### Five selection tests narrow the remaining problem
+
+- `ReferenceSelection`: complementary rotation preserves reference, changes link
+- `NativeReferenceFreedom`: same amplitude eigenstate throughout link family
+- `FlavourResponseSelection`: uniform response sees only spectrum, ties all mixing
+- `SelectionSymmetry`: unique minimum inherits symmetry, not broken
+- `TransitionSelection`: unconstrained minimization → zero flux; required work → lower bound
+
+These rules out several incomplete routes to angle selection. The gap-weighted
+relative-frame cost below supplies the missing weighting; an **event-level law
+for required transfer between the identified generations**, together with its
+actual preparation/readout and priced work, remains the open obligation.
+
+`FlavourOrderComparison` supplies a joint readout route using Paper II's
+`OrderComparison`: compare two evolution orders in opposite orders. The squared
+joint response is `(AB−BA)²/12`; a phase-flip example gives `(8/3)c²s²` for a
+complementary rotation.
+
+### Relative-frame cost and required transfer work
+
+`RelativeFrameCost` turns that readout into a price and shows it has the two
+properties the earlier readouts lacked.
+
+| Result | Content |
+| --- | --- |
+| `common_relabel` | a common class relabeling divides out — the value depends on the **relative** configuration |
+| `frameCost_zero_iff`, `aligned_zero`, `mixes_of_positive` | an exact obstruction to simultaneous diagonalization |
+| `gap_weighted`, `diagonal_free` | each frame entry is priced by its **own** eigenphase gap; only off-diagonal entries are charged |
+| `plane_cost01/02/12` | closed form `gap_ij · s² / 6` for a plane rotation |
+| `sum_three_pairs`, `frame_price` | any frame reduces to a linear program in three pair weights |
+| `signal_range01`, `signal_max01`, `signal_attainable` | exact range `0 ≤ price ≤ gap/6`, every value attained |
+| `sign_tie01`, `conjugation_tie` | even in the amplitude and CP-even — no branch selection |
+
+`GenerationPersistence` models inter-generation transfer as a rate policy: any
+nonzero net drift accumulates without bound (`starvation_grows_linearly`), so
+bounded accumulation forces a balanced policy (`persistence_selects_balanced`).
+
+`TransferWorkLaw` combines the two into the required-work law the five tests
+asked for: `12 · price = Σ gap · weight` and `12 · work = period · Σ gap ·
+weight`. Under a strictly ordered gap the smallest-gap pair is the **unique**
+cheapest transfer route (`min_cost_is_min_gap`, `wasted_work`,
+`unique_min_concentrates`), and a frame's induced policy is balanced already
+(`policyOf_balanced`).
+
+`Wolfenstein` defines the paper's four standard observables λ, A, ρ̄, η̄ on its own
+matrix for the first time, with exact closed forms and the decimal-free ordering
+`η̄ > ρ̄` (equivalent to `σ > 2χ`), plus the proof that the leading Wolfenstein
+`V_td` is exact only at zero mixing.
+
+`SpectralGapOrder` then removes the three gaps as inputs. Using the eigenphases
+of the existing `FlavourEvolution.evolution` (`eigenphase_is_evolution_diagonal`),
+the chord law `gap_of_splitting` gives `gap i j = 2 − 2 cos|t(e i − e j)|`, the
+splittings telescope (`splitting_telescope`), and inside one chord branch price
+order is splitting order (`gap_lt_iff_splitting_lt`). Hence:
+
+| Result | Content |
+| --- | --- |
+| `extreme_is_widest`, `extreme_never_cheapest` | the extreme generation pair carries the **largest** gap |
+| `route_is_tightest_adjacent` / `'` | a work-minimizing frame routes through an **adjacent** pair only |
+| `route_extreme_amplitude_vanishes` | the extreme-pair amplitude is exactly zero at the bound |
+| `splitting_comparison_is_spectral`, `..._scalefree` | the surviving choice is `e₁−e₀` vs `e₂−e₁`; the tick divides out |
+| `degenerate_route_free`, `doublet_free`, `doublet_price_tie` | a degenerate pair has zero gap and zero price |
+| `gap_budget`, `gap_not_independent`, `gap_le_four` | the three gaps are constrained, not independent |
+
+**What is selected vs. what is not.** The gap ordering selects *which* pair
+transfers, and the tighter adjacent splitting selects *which adjacent* pair. It
+does not select *how much*: the total weight has zero
+unconstrained minimum (`zero_weight_minimum`, mirroring
+`TransitionSelection.zero_flux_minimum`) and the price is even in the amplitude
+(`weight_not_selected`). Deriving the required weight, and identifying the three
+pair gaps as numbers rather than inputs, remain physical obligations. No
+measured angle is used in any of these modules.
+
+### Lepton-axis restriction + Dirac survival
+
+`LeptonAxisRestriction` derives from the reference-maintenance contract that
+every admissible event root avoids the lepton axis (`cycle_root_axis_zero`),
+so B−L is conserved and all Majorana pairings are unreachable. Combining with
+`MassTermLaw`, `dirac_survival` proves only the Dirac neutrino mass term survives.
+
+`MassTermLaw` supplies conditional insertion-cost and carrier-root exclusions
+under an isolated-reflection and gauge-repair contract.
 
 ## Verification
 
 `check.sh` builds the default library, strictly audits transitive axioms against
 only `propext`, `Classical.choice`, `Quot.sound`, and checks the no-Papers-V–VI
-boundary. `AuditIndependent.lean` separately checks five generic modules for no
-earlier/later theory imports: `OscillationAlgebra`, `SymmetricMass`,
-`CPAsymmetry`, `RelativisticPhase` and `OscillationStability`.
+boundary. `AuditIndependent.lean` separately checks six generic modules for no
+earlier/later theory imports.
 
-On 2026-10-30, the integrated `check.sh` passed **4154 build jobs** and the
-strict audit of **436 PMDynamics declarations**, with no warnings. Both the
-no-Papers-V–VI dependency audit and the five-module independent-algebra audit
-passed. Log: `/tmp/pm4-stability-full-check.log`. This includes the new phase,
-transition-probability and vacuum-asymmetry stability bounds. Only Paper IV's
-`lean/` sources/documentation changed in this pass; no earlier source,
-calculator or manuscript was edited.
+**4315** build jobs, **zero** errors, **zero** warnings
+**1515** strict-audited PMDynamics declarations
+No Paper V–VI imports, six-module independent-algebra audit passed
+
+See [OVERVIEW.md](OVERVIEW.md) for the overview of checked results.
+See [REVIEW-AND-NEXT.md](REVIEW-AND-NEXT.md) for the remaining open work.

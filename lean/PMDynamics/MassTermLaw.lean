@@ -33,8 +33,12 @@ prices from persistence (`PersistenceSelection`). Charges are Paper III's forced
   sterile Majorana term is excluded too. **Only the Dirac neutrino mass term survives.** The same
   restriction forbids lepton–colour (proton-decay) root events.
 
-Premise carried from Paper III: the carrier–channel identification (`CarrierRepresentation`, axis
-`0` is the lepton axis).
+Scope: the carrier–channel identification (`CarrierRepresentation`, axis `0` is the lepton axis),
+the one-insertion pricing law and the reference/repair contract are application inputs. In
+particular, `allowed_roots_conserve_axis` assumes the root avoids axis `0`; it does not derive
+that restriction for every physical update. The reference argument below is for isolated carrier
+reflections with the stated gauge repair, not arbitrary coherent updates or composite protocols.
+The exclusions above are conditional on adopting that event contract.
 -/
 
 noncomputable section

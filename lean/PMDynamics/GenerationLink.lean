@@ -5,18 +5,22 @@ import Mathlib.LinearAlgebra.Matrix.Hermitian
 /-!
 # The generation update, its symmetric link, and what that selects
 
-Review items 1–3. Paper III derives three generations as the unordered pairs of distinct
-nontrivial glue classes (`Generations.three_pairs`). Paper I's substrate symmetries permute the
-three classes as `S₃` (`ChannelSymmetry.hada_class`, `flip_class`).
+Review items 1–3. Under the distinct-pair packet contract, Paper III classifies three unordered
+pairs of nontrivial glue classes (`Generations.three_pairs`). Identifying these packet types
+with physical generations is an additional application premise. Paper I's substrate symmetries
+permute the three classes as `S₃` (`ChannelSymmetry.hada_class`, `flip_class`).
 
 **Item 1: the generation carrier and its primitive transitions.**
-* A generation is the pair of classes it uses. Equivalently, it is the one class it omits
+* In this candidate model a generation is the pair of classes it uses. Equivalently, it is the one class it omits
   (`pair_of_missing`), so the generation label lives in `Fin 3`.
 * A primitive generation transition replaces one class of the pair. `share_one`: any two distinct
   generations share exactly one class, so every generation is one primitive step from every other
   (the complete graph on three generations).
 * Class permutations act on generations by the same permutation of the missing class
-  (`act_pair`). A link built from substrate data alone is invariant under them.
+  (`act_pair`). Link invariance under these permutations is an explicit hypothesis.
+
+The primitive-step interpretation and the physical generation identification are not consequences
+of the finite pair classification alone.
 
 **Items 2–3: what an invariant link selects.**
 * `invariant_form`: an `S₃`-invariant link on three generations is `α·1 + β·(J − 1)`.

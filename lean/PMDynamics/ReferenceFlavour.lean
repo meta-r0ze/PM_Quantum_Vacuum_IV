@@ -9,7 +9,8 @@ persist exactly (`SectorObligations.refresh_exact`, `HomogeneousRouting.forever_
 
 * `persistent_single_frequency`: a state evolving by diagonal phases stays on its ray for all
   times only if all its nonzero components share one frequency (`OnShell.beats`). So **the
-  reference's generation state is a neutrino mass eigenstate**: it cannot oscillate.
+  reference's generation state lies in one neutrino energy eigenspace**: it cannot oscillate.
+  Degenerate energies need not select a unique mass-basis vector; see `ReferenceSpectrum`.
 * `z2_invariant_iff`: under the residual `Z₂` left by the lepton axis (`GenerationBreaking`),
   an invariant generation state has the form `(x, y, y)`.
 * `mu_tau_column`: if the charged-lepton mass basis is the generation basis up to phases, the
