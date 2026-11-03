@@ -203,7 +203,9 @@ The geometric vectors successfully predict standard phenomenological observables
     \item \textbf{Sin($2\beta$):} The precision observable from $B^0 \to J/\psi K_S$ decays is predicted to be $\sin(2\beta) = \SinTwoBetaVal$, which \SinTwoBetaAccText.
 \end{itemize}
 
-The geometric matrix uniquely fixes the standard Wolfenstein expansion parameters:
+The geometric matrix uniquely fixes the standard Wolfenstein expansion parameters,
+defined in the usual way as $\lambda=|V_{us}|$, $A=|V_{cb}|/\lambda^2$ and
+$\bar\rho+i\bar\eta=\conj{V_{ub}}/(A\lambda^3)$:
 \begin{equation}
 \begin{split}
     \lambda &= \WolfLambdaVal \\
@@ -212,4 +214,34 @@ The geometric matrix uniquely fixes the standard Wolfenstein expansion parameter
     \bar{\eta} &= \WolfEtaVal
 \end{split}
 \end{equation}
-\textit{Note: The standard Wolfenstein parametrization is an $\mathcal{O}(\lambda^3)$ approximation. Minor deviations in $\bar{\rho}$ and $\bar{\eta}$ from standard global fits are expected artifacts of this perturbative expansion, whereas our underlying geometric derivation is exact.}
+Read off the parametrization $V_{us}=s_{12}c_{13}$, $V_{cb}=s_{23}c_{13}$,
+$V_{ub}=s_{13}\conj{u}$, these are not four independent numbers but the closed
+forms $\lambda=s_{12}c_{13}$, $A=s_{23}c_{13}/(s_{12}c_{13})^2$,
+$\bar\rho=s_{13}\cos\delta_{CP}/(A\lambda^3)$ and
+$\bar\eta=s_{13}\sin\delta_{CP}/(A\lambda^3)$, with
+$A\lambda^2=|V_{cb}|$, $\bar\eta/\bar\rho=\tan\delta_{CP}$ and
+$\bar\rho^2+\bar\eta^2=s_{13}^2/(A\lambda^3)^2$ holding exactly
+(Lean: \texttt{Wolfenstein.wLam\_eq}, \texttt{wA\_eq}, \texttt{wRho\_eq},
+\texttt{wEta\_eq}, \texttt{wA\_lam\_sq}, \texttt{weta\_div\_wrho},
+\texttt{rho\_sq\_add\_eta\_sq}).
+
+Because $\delta_{CP}=\arctan(\sigma/\chi)$, the ordering of the last two is a
+statement about the invariants, not a number: $\sigma>2\chi$ gives
+$\delta_{CP}>\pi/4$, hence $\cos\delta_{CP}<\sin\delta_{CP}$ and therefore
+$\bar\rho<\bar\eta$ --- the unitarity-triangle apex lies above the
+$\bar\rho$ axis (Lean: \texttt{Wolfenstein.delta\_gt\_pi\_four},
+\texttt{cos\_delta\_lt\_sin\_delta}, \texttt{wEta\_gt\_wRho}). Likewise the
+expansion is licensed rather than assumed: $0<\lambda<1$ with
+$\lambda^2<\lambda$ and $\lambda^3<\lambda^2$, so successive Wolfenstein orders
+strictly decrease (Lean: \texttt{Wolfenstein.wolfenstein\_series\_suppressed}).
+
+\textit{Note on the $\mathcal{O}(\lambda^3)$ truncation.} The claim that
+deviations in $\bar\rho$ and $\bar\eta$ are artifacts of the perturbative
+expansion is now checkable rather than asserted. The exact geometric $V_{td}$ has
+imaginary part $-c_{12}c_{23}s_{13}\sin\delta_{CP}$, while the leading value
+$A\lambda^3(1-\bar\rho-i\bar\eta)$ has $-s_{13}\sin\delta_{CP}$: the two
+disagree by the factor $c_{12}c_{23}<1$, and they agree \emph{if and only if}
+$c_{12}c_{23}=1$, i.e. only in the no-mixing limit
+(Lean: \texttt{Wolfenstein.Vtd\_im}, \texttt{leading\_Vtd\_im\_ne},
+\texttt{leading\_Vtd\_im\_eq\_iff}). Our underlying geometric derivation is
+exact; the leading parametrization reproduces it only to the order stated.
