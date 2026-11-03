@@ -186,6 +186,13 @@ theorem pmJ_bounds : (3.02e-5 : ℝ) < pmJ ∧ pmJ < 3.03e-5 := by
   · refine lt_of_le_of_lt ?_ p6.1; norm_num
   · refine lt_of_lt_of_le p6.2 ?_; norm_num
 
+/-- `|V_ud| = c₁₂ c₁₃`, with the certified enclosures. -/
+lemma vud_bounds : (0.974490 : ℝ) < c12*c13 ∧ c12*c13 < 0.974499 := by
+  have hc : (0.999993 : ℝ) < c13 ∧ c13 < 1.0000001 :=
+    ⟨c13_bounds.1, by linarith [c13_bounds.2]⟩
+  have p := mul_bounds (by norm_num) (by norm_num) c12_bounds hc
+  constructor <;> linarith [p.1, p.2]
+
 theorem pm_jarlskog_matrix :
     jarlskog (ckm c12 s12 c23 s23 c13 s13 (Complex.exp ((δ:ℂ) * Complex.I))) = pmJ := by
   have hs := s12_bounds
