@@ -176,7 +176,7 @@ boundary. `AuditIndependent.lean` separately checks six generic modules for no
 earlier/later theory imports.
 
 **4315** build jobs, **zero** errors, **zero** warnings
-**1515** strict-audited PMDynamics declarations
+**1515** strict-audited PMFlavor declarations
 No Paper V–VI imports, six-module independent-algebra audit passed
 
 See [OVERVIEW.md](OVERVIEW.md) for the overview of checked results.

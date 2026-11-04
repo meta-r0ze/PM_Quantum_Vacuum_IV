@@ -77,7 +77,7 @@ residuals against the ledger. Do not put measured numbers into the theorem tree.
 ## Verification
 
 **4315** build jobs, **zero** errors, **zero** warnings
-**1515** strict-audited PMDynamics declarations
+**1515** strict-audited PMFlavor declarations
 No Paper V–VI imports, six-module independent-algebra audit passes.
 Permitted transitive axioms: only `propext`, `Classical.choice`, `Quot.sound`.
 
