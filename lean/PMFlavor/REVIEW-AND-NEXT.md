@@ -1,15 +1,8 @@
-# Paper IV: open work (todo)
+# PMFlavor — open work (todo)
 
 Checked mathematics and the downstream handoff are in [`OVERVIEW.md`](OVERVIEW.md).
-This file is only what remains. Paper IV builds clean (4315 jobs, zero warnings,
-1515 strict-audited declarations). Every item below is a physical input no theorem
+This file is only what remains. Paper IV builds clean; run `./check.sh` for current counts. Every item below is a physical input no theorem
 can supply, a data task, or a genuinely open structural question.
-
-> **Current focus (2026-11-04).** The PM-2 Yang–Mills branch is frozen at its
-> classical/finite-volume deliverable (see `PM-2-Action/lean/YANG-MILLS-STATUS.md`).
-> The redirected PM-specific work is here: **item 2** (global all-nonzero mixing)
-> and **item 5** (per-step maintenance contract) are the two structural targets,
-> alongside the native control/admission question in PM-2 `NativePacketUpdate`.
 
 ## Open items
 
@@ -76,9 +69,4 @@ residuals against the ledger. Do not put measured numbers into the theorem tree.
 
 ## Verification
 
-**4315** build jobs, **zero** errors, **zero** warnings
-**1515** strict-audited PMFlavor declarations
-No Paper V–VI imports, six-module independent-algebra audit passes.
-Permitted transitive axioms: only `propext`, `Classical.choice`, `Quot.sound`.
-
-Full check log: `check.sh`.
+Run `./check.sh`. No Paper V–VI imports; permitted axioms `propext`, `Classical.choice`, `Quot.sound`.

@@ -1,4 +1,4 @@
-# Paper IV: overview of checked results
+# PMFlavor — overview of checked results
 
 *Persistence Mechanics of the Quantum Vacuum IV: Information Transfer.*
 
@@ -99,9 +99,4 @@ for VI) — not missing Paper IV proofs.
 
 ## Verification
 
-**4315** build jobs, **zero** errors, **zero** warnings
-**1515** strict-audited PMFlavor declarations
-No Paper V–VI imports; six-module independent-algebra audit passes.
-Permitted transitive axioms: only `propext`, `Classical.choice`, `Quot.sound`.
-
-Full check log: `check.sh`.
+Run `./check.sh`. No Paper V–VI imports; permitted axioms `propext`, `Classical.choice`, `Quot.sound`.
