@@ -5,6 +5,12 @@ This file is only what remains. Paper IV builds clean (4315 jobs, zero warnings,
 1515 strict-audited declarations). Every item below is a physical input no theorem
 can supply, a data task, or a genuinely open structural question.
 
+> **Current focus (2026-11-04).** The PM-2 Yang–Mills branch is frozen at its
+> classical/finite-volume deliverable (see `PM-2-Action/lean/YANG-MILLS-STATUS.md`).
+> The redirected PM-specific work is here: **item 2** (global all-nonzero mixing)
+> and **item 5** (per-step maintenance contract) are the two structural targets,
+> alongside the native control/admission question in PM-2 `NativePacketUpdate`.
+
 ## Open items
 
 ### 1. Numerical link weights (physics, not a proof)

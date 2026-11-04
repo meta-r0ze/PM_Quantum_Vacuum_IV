@@ -1,9 +1,9 @@
 name = "pm_dynamics"
 version = "0.1.0"
-defaultTargets = ["PMDynamics"]
+defaultTargets = ["PMFlavor"]
 
 [[lean_lib]]
-name = "PMDynamics"
+name = "PMFlavor"
 
 [[require]]
 name = "pm_arch"

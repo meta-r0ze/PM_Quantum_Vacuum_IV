@@ -1,9 +1,9 @@
-import PMDynamics.OscillationAlgebra
-import PMDynamics.SymmetricMass
-import PMDynamics.CPAsymmetry
-import PMDynamics.RelativisticPhase
-import PMDynamics.OscillationStability
-import PMDynamics.SpectralVariance
+import PMFlavor.OscillationAlgebra
+import PMFlavor.SymmetricMass
+import PMFlavor.CPAsymmetry
+import PMFlavor.RelativisticPhase
+import PMFlavor.OscillationStability
+import PMFlavor.SpectralVariance
 import Lean
 
 /-! These general results deliberately use no theory-package imports.
@@ -13,8 +13,8 @@ run_cmd do
   let env ← getEnv
   for name in env.allImportedModuleNames do
     if name.toString.startsWith "PM" then
-      unless name == `PMDynamics.OscillationAlgebra || name == `PMDynamics.SymmetricMass ||
-          name == `PMDynamics.CPAsymmetry || name == `PMDynamics.RelativisticPhase ||
-          name == `PMDynamics.OscillationStability || name == `PMDynamics.SpectralVariance do
+      unless name == `PMFlavor.OscillationAlgebra || name == `PMFlavor.SymmetricMass ||
+          name == `PMFlavor.CPAsymmetry || name == `PMFlavor.RelativisticPhase ||
+          name == `PMFlavor.OscillationStability || name == `PMFlavor.SpectralVariance do
         throwError "Theory dependency {name} in the independent algebra modules"
   logInfo "Independent algebra audit passed: no earlier or later paper imports"
